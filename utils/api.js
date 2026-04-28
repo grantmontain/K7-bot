@@ -89,7 +89,7 @@ const APIs = {
   // Random Meme
   getMeme: async () => {
     try {
-      const response = await api.get('https://meme-api.com/gimme');
+      const response = await api.get('https://meme-api.com/gimme/brasil');
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch meme');
