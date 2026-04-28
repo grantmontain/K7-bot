@@ -90,10 +90,8 @@ const APIs = {
   getMeme: async () => {
     try {
       const subs = [
-  'memes',
-  'dankmemes',
-  'wholesomememes',
-  'funny'
+  'NaoMortoAbraDentro',
+  'andreyoung'
 ];
 
 const randomSub = subs[Math.floor(Math.random() * subs.length)];
