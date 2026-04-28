@@ -99,7 +99,7 @@ const APIs = {
   // Random Quote
   getQuote: async () => {
     try {
-      const response = await api.get('https://pensador-api.vercel.app/?term=motivacional');
+      const response = await api.get('https://api.adviceslip.com/advice');
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch quote');
