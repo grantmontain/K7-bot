@@ -89,7 +89,16 @@ const APIs = {
   // Random Meme
   getMeme: async () => {
     try {
-      const response = await api.get('https://meme-api.com/gimme/NaoMortoAbraDentro,andreyoung');
+      const subs = [
+  'memes',
+  'dankmemes',
+  'wholesomememes',
+  'funny'
+];
+
+const randomSub = subs[Math.floor(Math.random() * subs.length)];
+
+const response = await api.get(`https://meme-api.com/gimme/${randomSub}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch meme');
