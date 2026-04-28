@@ -109,7 +109,7 @@ const APIs = {
   // Random Joke
   getJoke: async () => {
     try {
-      const response = await api.get('https://official-joke-api.appspot.com/random_joke');
+      const response = await api.get('https://v2.jokeapi.dev/joke/Any?lang=pt');
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch joke');
