@@ -9,7 +9,7 @@ module.exports = {
   name: 'menu',
   aliases: ['help', 'commands'],
   category: 'general',
-  description: 'Show all available commands',
+  description: 'Mostra todos os comandos',
   usage: '.menu',
   
   async execute(sock, msg, args, extra) {
@@ -31,15 +31,15 @@ module.exports = {
       const displayOwner = ownerNames[0] || config.ownerName || 'Bot Owner';
       
       let menuText = `╭━━『 *${config.botName}* 』━━╮\n\n`;
-      menuText += `👋 Hello @${extra.sender.split('@')[0]}!\n\n`;
-      menuText += `⚡ Prefix: ${config.prefix}\n`;
-      menuText += `📦 Total Commands: ${commands.size}\n`;
-      menuText += `👑 Owner: ${displayOwner}\n\n`;
+      menuText += `👋 Olá @${extra.sender.split('@')[0]}!\n\n`;
+      menuText += `⚡ Prefixo: ${config.prefix}\n`;
+      menuText += `📦 Total de Comandos: ${commands.size}\n`;
+      menuText += `👑 Dono: ${displayOwner}\n\n`;
       
       // General Commands
       if (categories.general) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🧭 GENERAL COMMAND\n`;
+        menuText += `┃ 🧭 COMANDOS GERAIS\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.general.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -50,7 +50,7 @@ module.exports = {
       // AI Commands
       if (categories.ai) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🤖 AI COMMAND\n`;
+        menuText += `┃ 🤖 COMANDOS IA\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.ai.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -61,7 +61,7 @@ module.exports = {
       // Group Commands
       if (categories.group) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🔵 GROUP COMMAND\n`;
+        menuText += `┃ 🔵 COMANDOS DE GRUPO\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.group.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -72,7 +72,7 @@ module.exports = {
       // Admin Commands
       if (categories.admin) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🛡️ ADMIN COMMAND\n`;
+        menuText += `┃ 🛡️ COMANDOS ADMIN\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.admin.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -83,7 +83,7 @@ module.exports = {
       // Owner Commands
       if (categories.owner) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 👑 OWNER COMMAND\n`;
+        menuText += `┃ 👑 COMANDOS DONO\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.owner.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -94,7 +94,7 @@ module.exports = {
       // Media Commands
       if (categories.media) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🎞️ MEDIA COMMAND\n`;
+        menuText += `┃ 🎞️ COMANDOS MEDIA\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.media.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -105,7 +105,7 @@ module.exports = {
       // Fun Commands
       if (categories.fun) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🎭 FUN COMMAND\n`;
+        menuText += `┃ 🎭 COMANDOS DIVERSÃO\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.fun.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
@@ -116,20 +116,9 @@ module.exports = {
       // Utility Commands
       if (categories.utility) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🔧 UTILITY COMMAND\n`;
+        menuText += `┃ 🔧 UTILITARIOS\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.utility.forEach(cmd => {
-          menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
-        });
-        menuText += `\n`;
-      }
-
-       // Anime Commands
-       if (categories.anime) {
-        menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 👾 ANIME COMMAND\n`;
-        menuText += `┗━━━━━━━━━━━━━━━━━\n`;
-        categories.anime.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
         });
         menuText += `\n`;
@@ -138,7 +127,7 @@ module.exports = {
        // Textmaker Commands
        if (categories.utility) {
         menuText += `┏━━━━━━━━━━━━━━━━━\n`;
-        menuText += `┃ 🖋️ TEXTMAKER COMMAND\n`;
+        menuText += `┃ 🖋️ COMANDOS TEXTMAKER\n`;
         menuText += `┗━━━━━━━━━━━━━━━━━\n`;
         categories.textmaker.forEach(cmd => {
           menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
