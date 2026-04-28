@@ -12,15 +12,21 @@ module.exports = {
   usage: '.joke',
   
   async execute(sock, msg, args, extra) {
-    try {
-      const joke = await APIs.getJoke();
+  try {
+    const joke = await APIs.getJoke();
       
-      let text = `${joke.setup}\n\n${joke.punchline}`;
-      
-      await extra.reply(text);
-      
-    } catch (error) {
-      await extra.reply(`❌ Error: ${error.message}`);
+    let text;
+
+    if (joke.type === 'single') {
+      text = joke.joke;
+    } else {
+      text = `${joke.setup}\n\n${joke.delivery}`;
     }
+      
+    await extra.reply(text);
+      
+  } catch (error) {
+    await extra.reply(`❌ Error: ${error.message}`);
   }
+}
 };
