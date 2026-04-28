@@ -10,7 +10,7 @@
 
 </div>
 
-Knight Bot Mini é um bot MD para WhatsApp construído sobre a biblioteca **Baileys**.
+K7 é um bot para WhatsApp construído sobre a biblioteca **Baileys**.
 Ele foi projetado para ser rápido, leve e fácil de personalizar sem precisar mexer no código principal.
 Este projeto é **totalmente open source** — você pode modificá-lo, rebatizá-lo e criar seu **próprio bot** a partir deste código **gratuitamente**, sem precisar de qualquer permissão da nossa parte.
 Todos os comandos e a estrutura geral foram escritos de forma que a personalização (imagem do bot, prefixo, nome, funcionalidades, etc.) seja o mais simples possível.
@@ -27,75 +27,13 @@ Todos os comandos e a estrutura geral foram escritos de forma que a personaliza�
 
 ---
 
-### 1. Fazer Fork do Repositório
-
-<div align="center">
-
-<a href="https://github.com/mruniquehacker/Knightbot-Mini/fork" target="_blank">
-  <img src="https://img.shields.io/badge/Fork%20Repository-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Fork on GitHub">
-</a>
-
-</div>
-
-> Isso cria sua própria cópia de `Knightbot-Mini` na sua conta do GitHub.
-
----
-
-### 2. Obter Pair Code
-
-Faça o deploy de um pequeno helper para gerar um **pair code** e obter sua string de sessão.
-
-<div align="center">
-
-<a href="https://knight-bot-paircode.onrender.com/" target="_blank">
-  <img src="https://img.shields.io/badge/Generate-Pair%20Code-blueviolet?style=for-the-badge" alt="Generate Pair Code">
-</a>
-
-</div>
-
-Após escanear, você receberá uma **string de sessão** começando com:
-
-```text
-KnightBot!H4....
-```
-
-Copie essa string completa e cole em `config.js`:
-
-```js
-sessionID: 'KnightBot!H4.....'
-```
-
-Ou defina via variável de ambiente `SESSION_ID` ao hospedar.
-
----
-
-### 3. Deploy em Painel (Katabump, etc.)
-
-<div align="center">
-
-<a href="https://dashboard.katabump.com/auth/login#d6b7d6" target="_blank">
-  <img src="https://img.shields.io/badge/Deploy%20on-Katabump-orange?style=for-the-badge" alt="Deploy on Katabump">
-</a>
-
-</div>
-
-Para um tutorial completo passo a passo de deploy (painéis / VPS / Heroku), adicione ou atualize seu guia no YouTube aqui:
-
-<div align="center">
-  <a href="https://youtu.be/4PQcn-qqrcE">
-    <img src="https://img.shields.io/badge/Deploy Tutorial-dc3545?style=for-the-badge&logo=youtube" alt="YouTube Link"/>
-  </a>
-</div>
-
----
-
 ## 🛠 Configuração Local
 
 ### 1️⃣ Clonar o repositório
 
 ```bash
-git clone https://github.com/mruniquehacker/Knightbot-Mini.git
-cd Knightbot-Mini
+git clone https://github.com/grantmontain/K7-bot.git
+cd K7-bot
 ```
 
 ### 2️⃣ Instalar dependências
@@ -153,13 +91,14 @@ Quando o bot iniciar:
 
 ## 🙏 Créditos
 
-* **Mr Unique Hacker** – Desenvolvedor principal e mantenedor
+* **Montanha** - Desenvolvedor e mantenedor desse folk
+* **Mr Unique Hacker** – Desenvolvedor principal e mantenedor do bot original
 * **Baileys** – Biblioteca da API do WhatsApp Web (`@whiskeysockets/baileys`)
 * Outras bibliotecas open source listadas em `package.json`
 
 ---
 
-## ☕ Apoie-me
+## ☕ Apoie os desenvolvedores originais
 
 <div align="center">
 
@@ -169,7 +108,7 @@ Quando o bot iniciar:
 
 </div>
 
-Se você achou este projeto útil e quer apoiar o desenvolvedor, considere pagar um café! Seu apoio ajuda a manter e melhorar este projeto open source.
+Se você achou este projeto útil e quer apoiar o desenvolvedor, considere pagar um café! 
 
 <div align="center">
 
