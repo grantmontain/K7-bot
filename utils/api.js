@@ -90,13 +90,13 @@ const APIs = {
   getMeme: async () => {
     try {
       const subs = [
-  'NaoMortoAbraDentro',
-  'andreyoung'
-];
+        'NaoMortoAbraDentro',
+        'andreyoung'
+      ];
 
-const randomSub = subs[Math.floor(Math.random() * subs.length)];
+      const randomSub = subs[Math.floor(Math.random() * subs.length)];
 
-const response = await api.get(`https://meme-api.com/gimme/${randomSub}`);
+      const response = await api.get(`https://meme-api.com/gimme/${randomSub}`);
       return response.data;
     } catch (error) {
       throw new Error('Failed to fetch meme');
