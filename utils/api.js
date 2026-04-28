@@ -91,7 +91,7 @@ const APIs = {
     try {
       const subs = [
         'NaoMortoAbraDentro',
-        'andreyoung'
+        'MemesBrasil'
       ];
 
       const randomSub = subs[Math.floor(Math.random() * subs.length)];
