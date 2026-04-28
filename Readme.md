@@ -73,22 +73,6 @@ Quando o bot iniciar:
 
 ---
 
-## 🌐 Comunidade
-
-<div align="center">
-
-<a href="https://t.me/+3QhFUZHx-nhhZmY1" target="_blank">
-  <img src="https://img.shields.io/badge/Join-Telegram-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Join Telegram">
-</a>
-
-<a href="https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A" target="_blank">
-  <img src="https://img.shields.io/badge/Join-WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Join WhatsApp Channel">
-</a>
-
-</div>
-
----
-
 ## 🙏 Créditos
 
 * **Montanha** - Desenvolvedor e mantenedor desse folk
