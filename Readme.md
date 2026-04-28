@@ -10,25 +10,24 @@
 
 </div>
 
-Knight Bot Mini is a WhatsApp MD bot built on top of the **Baileys** library.  
-It’s designed to be fast, lightweight, and easy to customize without touching the core code.  
-This project is **fully open source** — you can modify it, rebrand it, and make your **own bot** from this codebase **free of cost**, without needing any permission from our side.  
-All commands and the overall structure are written in a way that makes customization (bot image, prefix, name, features, etc.) as easy as possible.
+Knight Bot Mini é um bot MD para WhatsApp construído sobre a biblioteca **Baileys**.
+Ele foi projetado para ser rápido, leve e fácil de personalizar sem precisar mexer no código principal.
+Este projeto é **totalmente open source** — você pode modificá-lo, rebatizá-lo e criar seu **próprio bot** a partir deste código **gratuitamente**, sem precisar de qualquer permissão da nossa parte.
+Todos os comandos e a estrutura geral foram escritos de forma que a personalização (imagem do bot, prefixo, nome, funcionalidades, etc.) seja o mais simples possível.
 
 ---
 
+## ✨ Funcionalidades
 
-## ✨ Features
-
-- **Fully Open Source** – entire codebase is editable; host it anywhere (Heroku, panel, VPS, etc.).  
-- **Easy Customization via Commands** – change **bot image**, **prefix**, **channel/newsletter**, **bot name**, etc. with simple commands.  
-- **Modular Command System** – commands are organized in the `commands` folder for easy editing.  
-- **Optimized for Stability** – RAM‑optimized media handling (streaming, temp cleanup), better session handling via `sessionID` in `config.js`.  
-- **Owner Utilities** – restart, update from ZIP, and more owner‑only tools.
+* **Totalmente Open Source** – todo o código pode ser editado; hospede onde quiser (Heroku, painel, VPS, etc.).
+* **Personalização Fácil via Comandos** – altere **imagem do bot**, **prefixo**, **canal/newsletter**, **nome do bot**, etc. com comandos simples.
+* **Sistema de Comandos Modular** – os comandos são organizados na pasta `commands` para fácil edição.
+* **Otimizado para Estabilidade** – gerenciamento de mídia otimizado em RAM (streaming, limpeza temporária), melhor controle de sessão via `sessionID` em `config.js`.
+* **Utilidades para o Dono** – reiniciar, atualizar via ZIP e outras ferramentas exclusivas para o proprietário.
 
 ---
 
-### 1. Fork the Repository
+### 1. Fazer Fork do Repositório
 
 <div align="center">
 
@@ -38,13 +37,13 @@ All commands and the overall structure are written in a way that makes customiza
 
 </div>
 
-> This creates your own copy of `Knightbot-Mini` under your GitHub account.
+> Isso cria sua própria cópia de `Knightbot-Mini` na sua conta do GitHub.
 
 ---
 
-### 2. Get Pair Code
+### 2. Obter Pair Code
 
-Deploy a small helper to generate a **pair code** and obtain your session string.
+Faça o deploy de um pequeno helper para gerar um **pair code** e obter sua string de sessão.
 
 <div align="center">
 
@@ -54,23 +53,23 @@ Deploy a small helper to generate a **pair code** and obtain your session string
 
 </div>
 
-After scanning, you will receive a **session string** starting with:
+Após escanear, você receberá uma **string de sessão** começando com:
 
 ```text
 KnightBot!H4....
 ```
 
-Copy that full string and paste it into `config.js`:
+Copie essa string completa e cole em `config.js`:
 
 ```js
 sessionID: 'KnightBot!H4.....'
 ```
 
-Or set it via the `SESSION_ID` environment variable when hosting.
+Ou defina via variável de ambiente `SESSION_ID` ao hospedar.
 
 ---
 
-### 3. Deploy on Panel (Katabump, etc.)
+### 3. Deploy em Painel (Katabump, etc.)
 
 <div align="center">
 
@@ -80,7 +79,7 @@ Or set it via the `SESSION_ID` environment variable when hosting.
 
 </div>
 
-For a full step‑by‑step deployment tutorial (panels / VPS / Heroku), add or update your YouTube guide here:
+Para um tutorial completo passo a passo de deploy (painéis / VPS / Heroku), adicione ou atualize seu guia no YouTube aqui:
 
 <div align="center">
   <a href="https://youtu.be/4PQcn-qqrcE">
@@ -90,53 +89,53 @@ For a full step‑by‑step deployment tutorial (panels / VPS / Heroku), add or 
 
 ---
 
-## 🛠 Local Setup
+## 🛠 Configuração Local
 
-### 1️⃣ Clone the repository
+### 1️⃣ Clonar o repositório
 
 ```bash
 git clone https://github.com/mruniquehacker/Knightbot-Mini.git
 cd Knightbot-Mini
 ```
 
-### 2️⃣ Install dependencies
+### 2️⃣ Instalar dependências
 
 ```bash
 npm install
 ```
 
-### 3️⃣ Configure session
+### 3️⃣ Configurar sessão
 
-Edit `config.js`:
+Edite `config.js`:
 
-- **Option A: Use session string**
+* **Opção A: Usar string de sessão**
 
   ```js
   sessionID: 'KnightBot!H4.....'
   ```
 
-- **Option B: Scan QR**
+* **Opção B: Escanear QR**
 
   ```js
   sessionID: ''
   ```
 
-  Run the bot and scan the QR from the terminal.
+  Execute o bot e escaneie o QR pelo terminal.
 
-### 4️⃣ Run the bot
+### 4️⃣ Executar o bot
 
 ```bash
 node index.js
 ```
 
-When the bot starts:
+Quando o bot iniciar:
 
-- If `sessionID` is empty, a **QR code** will appear in the terminal – scan it using **Linked Devices** in WhatsApp.  
-- If `sessionID` is set, it will log in using that session string.
+* Se `sessionID` estiver vazio, um **QR code** aparecerá no terminal – escaneie usando **Dispositivos Conectados** no WhatsApp.
+* Se `sessionID` estiver definido, ele fará login usando essa string de sessão.
 
 ---
 
-## 🌐 Community
+## 🌐 Comunidade
 
 <div align="center">
 
@@ -152,15 +151,15 @@ When the bot starts:
 
 ---
 
-## 🙏 Credits
+## 🙏 Créditos
 
-- **Mr Unique Hacker** – Main developer & maintainer  
-- **Baileys** – WhatsApp Web API library (`@whiskeysockets/baileys`)  
-- Other open‑source libraries listed in `package.json`
+* **Mr Unique Hacker** – Desenvolvedor principal e mantenedor
+* **Baileys** – Biblioteca da API do WhatsApp Web (`@whiskeysockets/baileys`)
+* Outras bibliotecas open source listadas em `package.json`
 
 ---
 
-## ☕ Support Me
+## ☕ Apoie-me
 
 <div align="center">
 
@@ -170,7 +169,7 @@ When the bot starts:
 
 </div>
 
-If you find this project helpful and want to support the developer, consider buying me a coffee! Your support helps maintain and improve this open-source project.
+Se você achou este projeto útil e quer apoiar o desenvolvedor, considere pagar um café! Seu apoio ajuda a manter e melhorar este projeto open source.
 
 <div align="center">
 
@@ -180,48 +179,47 @@ If you find this project helpful and want to support the developer, consider buy
 
 ---
 
+## ⚠️ Aviso Importante
 
-## ⚠️ Important Warning
+* Este bot foi criado **apenas para fins educacionais**.
+* Este **NÃO** é um bot oficial do WhatsApp.
+* O uso de bots de terceiros **pode violar os Termos de Serviço do WhatsApp** e pode resultar no **banimento** da sua conta.
 
-- This bot is created **for educational purposes only**.  
-- This is **NOT** an official WhatsApp bot.  
-- Using third‑party bots **may violate WhatsApp’s Terms of Service** and can lead to your account being **banned**.
-
-> You use this bot **at your own risk**.  
-> The developers are **not responsible** for any bans, issues, or damages resulting from its use.
+> Você usa este bot **por sua conta e risco**.
+> Os desenvolvedores **não são responsáveis** por quaisquer banimentos, problemas ou danos decorrentes do uso.
 
 ---
 
 ## 📝 Legal
 
-- This project is **not affiliated with, authorized, maintained, sponsored, or endorsed** by WhatsApp Inc. or any of its affiliates or subsidiaries.  
-- This is **independent and unofficial software**.  
-- **Do not spam** people using this bot.  
-- **Do not** use this bot for bulk messaging, harassment, or any **illegal activities**.  
-- The developers assume **no liability** and are **not responsible** for any misuse or damage caused by this program.
+* Este projeto **não é afiliado, autorizado, mantido, patrocinado ou endossado** pela WhatsApp Inc. ou qualquer uma de suas afiliadas ou subsidiárias.
+* Este é um software **independente e não oficial**.
+* **Não faça spam** usando este bot.
+* **Não** utilize este bot para envio em massa, assédio ou quaisquer **atividades ilegais**.
+* Os desenvolvedores não assumem **qualquer responsabilidade** por uso indevido ou danos causados por este programa.
 
 ---
 
-## 📄 License (MIT)
+## 📄 Licença (MIT)
 
-This project is licensed under the **MIT License**.
+Este projeto está licenciado sob a **Licença MIT**.
 
-You must:
+Você deve:
 
-- Use this software in compliance with **all applicable laws and regulations**.  
-- Keep the **original license and copyright** notices.  
-- **Credit the original authors**.  
-- **Not** use this for spam, abuse, or malicious purposes.
+* Usar este software em conformidade com **todas as leis e regulamentos aplicáveis**.
+* Manter os avisos de **licença original e direitos autorais**.
+* **Dar crédito aos autores originais**.
+* **Não** usar para spam, abuso ou fins maliciosos.
 
 ---
 
-## 📜 Copyright Notice
+## 📜 Aviso de Direitos Autorais
 
-Copyright (c) **2026 Professor**.  
-All rights reserved.
+Copyright (c) **2026 Professor**.
+Todos os direitos reservados.
 
-This project contains code from various open‑source projects and AI tools, including but not limited to:
+Este projeto contém código de vários projetos open source e ferramentas de IA, incluindo, mas não se limitando a:
 
-- **Baileys** – MIT License  
-- Other libraries as listed in `package.json`
+* **Baileys** – Licença MIT
+* Outras bibliotecas conforme listado em `package.json`
 
