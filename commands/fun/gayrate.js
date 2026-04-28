@@ -3,7 +3,7 @@ module.exports = {
   name: 'gayrate',
   aliases: ['gay'],
   category: 'fun',
-  description: 'Playful gay percentage. Reply or mention a user.',
+  description: 'Medidor de gayzisse. Marque alguem',
   usage: '.gayrate (reply or @user)',
   
   async execute(sock, msg, args, extra) {
@@ -22,16 +22,16 @@ module.exports = {
       const percent = ((base % 101) + Math.floor(Math.random()*7)) % 101; // 0-100
 
       const messages = [
-        `${targetTag} is ${percent}% fabulous 🌈`,
-        `💖 Compatibility with rainbows: ${percent}% for ${targetTag}`,
-        `${targetTag} score: ${percent}% pure glitter ✨`
+        `${targetTag} é ${percent}% diva 🌈`,
+        `💖 Compatibilidade com arco-iris: ${percent}% para ${targetTag}`,
+        `${targetTag} é ${percent}% puro glitter ✨`
       ];
 
       const out = messages[Math.floor(Math.random() * messages.length)];
       await sock.sendMessage(extra.from, { text: out, mentions: [targetId] }, { quoted: msg });
     } catch (error) {
       console.error('[gayrate] ERROR:', error);
-      await extra.reply('❌ Something went wrong.');
+      await extra.reply('❌ Algo deu errado.');
     }
   }
 };
