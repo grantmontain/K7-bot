@@ -10,7 +10,7 @@
 
 </div>
 
-K7 é um bot para WhatsApp construído sobre a biblioteca **Baileys**.
+O K7 é um bot para WhatsApp construído sobre a biblioteca **Baileys**.
 Ele foi projetado para ser rápido, leve e fácil de personalizar sem precisar mexer no código principal.
 Este projeto é **totalmente open source** — você pode modificá-lo, rebatizá-lo e criar seu **próprio bot** a partir deste código **gratuitamente**, sem precisar de qualquer permissão da nossa parte.
 Todos os comandos e a estrutura geral foram escritos de forma que a personalização (imagem do bot, prefixo, nome, funcionalidades, etc.) seja o mais simples possível.
