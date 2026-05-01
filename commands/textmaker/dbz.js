@@ -6,11 +6,11 @@ const mumaker = require('mumaker');
 const config = require('../../config');
 
 module.exports = {
-  name: '1917',
+  name: 'dbz',
   aliases: [],
   category: 'textmaker',
-  description: 'Create 1917 style text effect',
-  usage: '.1917 <text>',
+  description: 'Create dbz style text effect',
+  usage: '.dbz <text>',
   
   async execute(sock, msg, args) {
     try {
@@ -19,11 +19,11 @@ module.exports = {
       
       if (!text) {
         return await sock.sendMessage(chatId, { 
-          text: 'Please provide text to generate\nExample: .1917 Nick' 
+          text: 'Please provide text to generate\nExample: .dbz Nick'
         }, { quoted: msg });
       }
       
-      const result = await mumaker.ephoto('https://en.ephoto360.com/1917-style-text-effect-523.html', text);
+      const result = await mumaker.ephoto('https://en.ephoto360.com/create-dragon-ball-style-text-effects-online-809.html', text);
       
       if (!result || !result.image) {
         throw new Error('No image URL received from the API');
@@ -35,7 +35,7 @@ module.exports = {
       }, { quoted: msg });
       
     } catch (error) {
-      console.error('Error in 1917 command:', error);
+      console.error('Error in dbz command:', error);
       await sock.sendMessage(msg.key.remoteJid, { 
         text: `Error: ${error.message}` 
       }, { quoted: msg });
