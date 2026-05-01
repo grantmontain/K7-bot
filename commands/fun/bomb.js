@@ -8,7 +8,7 @@ const gameState = new Map();
 
 module.exports = {
   gameState, // Export for handler access
-  name: 'bomb',
+  name: 'bomba',
   aliases: ['bom'],
   category: 'fun',
   description: 'Play bomb game - pick numbers 1-9, avoid the bomb!',
