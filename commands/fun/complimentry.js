@@ -3,56 +3,55 @@
  */
 
 module.exports = {
-    name: 'compliment',
-    aliases: ['praise', 'compliment'],
-    category: 'fun',
-    desc: 'Get a random compliment',
-    usage: 'compliment [@user]',
-    execute: async (sock, msg, args) => {
-      try {
-        const compliments = [
-          "You're an awesome friend! 💙",
-          "You light up the room! ✨",
-          "You're someone's reason to smile! 😊",
-          "You're even better than a unicorn! 🦄",
-          "You're a gift to those around you! 🎁",
-          "You're a smart cookie! 🍪",
-          "You're awesome! 🌟",
-          "You have the best laugh! 😄",
-          "You're gorgeous! 💖",
-          "You're more helpful than you realize! 🤝",
-          "You have a great sense of humor! 😂",
-          "You're really something special! ⭐",
-          "You're an incredible friend! 🫂",
-          "Your perspective is refreshing! 🌈",
-          "You're making a difference! 🌍",
-          "You're stronger than you think! 💪",
-          "Your smile is contagious! 😁",
-          "You're one of a kind! 💎",
-          "You bring out the best in people! 👏",
-          "You're inspiring! 🌟"
-        ];
-        
-        const mentioned = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
-        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
-        
-        if (mentioned.length > 0) {
-          await sock.sendMessage(msg.key.remoteJid, {
-            text: `${randomCompliment}`,
-            mentions: mentioned
-          }, { quoted: msg });
-        } else {
-          await sock.sendMessage(msg.key.remoteJid, {
-            text: `${randomCompliment}`
-          }, { quoted: msg });
-        }
-        
-      } catch (error) {
-        console.error('Compliment Error:', error);
+  name: 'elogie',
+  aliases: ['praise', 'compliment'],
+  category: 'fun',
+  desc: 'Receba um elogio aleatório',
+  usage: 'compliment [@user]',
+  execute: async (sock, msg, args) => {
+    try {
+      const compliments = [
+        "Você é um amigo incrível! 💙",
+        "Você ilumina o ambiente! ✨",
+        "Você é o motivo do sorriso de alguém! 😊",
+        "Você é ainda melhor que um unicórnio! 🦄",
+        "Você é um presente para quem está ao seu redor! 🎁",
+        "Você é muito inteligente! 🍪",
+        "Você é incrível! 🌟",
+        "Você tem a melhor risada! 😄",
+        "Você é lindo(a)! 💖",
+        "Você é mais útil do que imagina! 🤝",
+        "Você tem um ótimo senso de humor! 😂",
+        "Você é realmente especial! ⭐",
+        "Você é um amigo incrível! 🫂",
+        "Sua perspectiva é revigorante! 🌈",
+        "Você está fazendo a diferença! 🌍",
+        "Você é mais forte do que pensa! 💪",
+        "Seu sorriso é contagiante! 😁",
+        "Você é único(a)! 💎",
+        "Você tira o melhor das pessoas! 👏",
+        "Você é inspirador(a)! 🌟"
+      ];
+
+      const mentioned = msg.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+      const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+
+      if (mentioned.length > 0) {
         await sock.sendMessage(msg.key.remoteJid, {
-          text: `❌ Error: ${error.message}`
+          text: `${randomCompliment}`,
+          mentions: mentioned
+        }, { quoted: msg });
+      } else {
+        await sock.sendMessage(msg.key.remoteJid, {
+          text: `${randomCompliment}`
         }, { quoted: msg });
       }
+
+    } catch (error) {
+      console.error('Compliment Error:', error);
+      await sock.sendMessage(msg.key.remoteJid, {
+        text: `❌ Erro: ${error.message}`
+      }, { quoted: msg });
     }
-  };
-  
+  }
+};
