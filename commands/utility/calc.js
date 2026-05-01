@@ -2,11 +2,13 @@
  * Calculator Command - Perform math calculations
  */
 
+const { evaluate } = require('mathjs');
+
 module.exports = {
   name: 'calc',
   aliases: ['calculate', 'math'],
   category: 'utility',
-  description: 'Calcular expressões matemáticas',
+  description: 'Calcular expressões matemáticas avançadas',
   usage: '.calc <expressão>',
 
   async execute(sock, msg, args, extra) {
@@ -17,13 +19,8 @@ module.exports = {
 
       const expression = args.join(' ');
 
-      // Basic safety check
-      if (!/^[0-9+\-*/(). ]+$/.test(expression)) {
-        return extra.reply('❌ Expressão inválida! Apenas números e operadores (+, -, *, /, parênteses) são permitidos.');
-      }
-
       try {
-        const result = eval(expression);
+        const result = evaluate(expression);
 
         let text = `🧮 *Calculadora*\n\n`;
         text += `📝 Expressão: ${expression}\n`;
