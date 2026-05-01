@@ -5,11 +5,11 @@
 const APIs = require('../../utils/api');
 
 module.exports = {
-  name: 'joke',
+  name: 'piada',
   aliases: ['jokes'],
   category: 'fun',
-  description: 'Get random joke',
-  usage: '.joke',
+  description: 'Manda uma piada aleatoria',
+  usage: '.piada',
   
   async execute(sock, msg, args, extra) {
   try {

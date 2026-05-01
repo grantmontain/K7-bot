@@ -9,7 +9,7 @@ module.exports = {
   name: 'meme',
   aliases: ['memes'],
   category: 'fun',
-  description: 'Get random memes',
+  description: 'Manda um meme aleatório',
   usage: '.meme',
   
   async execute(sock, msg, args, extra) {
@@ -20,7 +20,7 @@ module.exports = {
       
       await sock.sendMessage(extra.from, {
         image: Buffer.from(imageBuffer.data),
-        caption: `😂 *${meme.title}*\n\n📱 From: r/${meme.subreddit}\n👤 By: ${meme.author}\n⬆️ Upvotes: ${meme.ups}`
+        caption: `😂 *${meme.title}*\n\n📱 From: r/${meme.subreddit}`
       }, { quoted: msg });
       
     } catch (error) {

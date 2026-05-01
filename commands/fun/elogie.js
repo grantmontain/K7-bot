@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['praise', 'compliment'],
   category: 'fun',
   desc: 'Receba um elogio aleatório',
-  usage: 'compliment [@user]',
+  usage: 'elogie [@user]',
   execute: async (sock, msg, args) => {
     try {
       const compliments = [

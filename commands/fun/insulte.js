@@ -1,11 +1,11 @@
 // commands/fun/insult.js
 module.exports = {
-  name: 'insult',
+  name: 'insulte',
   aliases: ['insultme','burn'],
   category: 'fun',
-  description: 'Give a silly insult to a user. Reply or mention to target someone.',
-  usage: '.insult (reply or @user)',
-  
+  description: 'Dê um insulto bobo a um usuário. Responda ou mencione para escolher alguém.',
+  usage: '.insulte (responda ou @usuário)',
+
   async execute(sock, msg, args, extra) {
     try {
       const ctx = msg.message?.extendedTextMessage?.contextInfo || {};
@@ -18,18 +18,18 @@ module.exports = {
       const targetTag = `@${(targetId || extra.sender).split('@')[0]}`;
 
       const insults = [
-        "You're as useful as a white crayon.",
-        "I'd call you sharp, but that would be offensive to pencils.",
-        "You're like a cloud. When you disappear, it's a beautiful day.",
-        "You bring everyone so much joy... when you leave the room.",
-        "If laziness was an Olympic sport, you'd come in fourth — so you wouldn't have to walk up to the podium."
+        "Você é tão útil quanto um lápis de cor branco.",
+        "Eu diria que você é afiado, mas isso seria uma ofensa aos lápis.",
+        "Você é como uma nuvem. Quando desaparece, o dia fica lindo.",
+        "Você traz tanta alegria para todos... quando sai do ambiente.",
+        "Se preguiça fosse um esporte olímpico, você ficaria em quarto — só pra não ter que subir no pódio."
       ];
 
       const line = insults[Math.floor(Math.random() * insults.length)];
       await sock.sendMessage(extra.from, { text: `${line}`, mentions: [targetId] }, { quoted: msg });
     } catch (error) {
       console.error('[insult] ERROR:', error);
-      await extra.reply('❌ Something went wrong.');
+      await extra.reply('❌ Algo deu errado.');
     }
   }
 };
