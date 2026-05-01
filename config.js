@@ -41,9 +41,9 @@ module.exports = {
       antigroupmention: false, // Anti-group mention feature
       antigroupmentionAction: 'delete', // 'delete', 'kick'
       welcome: false,
-      welcomeMessage: '╭╼━≪•𝙽𝙴𝚆 𝙼𝙴𝙼𝙱𝙴𝚁•≫━╾╮\n┃𝚆𝙴𝙻𝙲𝙾𝙼𝙴: @user 👋\n┃Member count: #memberCount\n┃𝚃𝙸𝙼𝙴: time⏰\n╰━━━━━━━━━━━━━━━╯\n\n*@user* Welcome to *@group*! 🎉\n*Group 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝚃𝙸𝙾𝙽*\ngroupDesc\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ botName*',
+      welcomeMessage: '╭╼━≪•NOVO MEMBRO•≫━╾╮\n┃BEM VINDO: @user 👋\n┃Contagem de menbros: #memberCount\n┃Hora: time⏰\n╰━━━━━━━━━━━━━━━╯\n\n*@user* Bem-vindo ao *@group*! 🎉\n*Group 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝚃𝙸𝙾𝙽*\ngroupDesc\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ botName*',
       goodbye: false,
-      goodbyeMessage: 'Goodbye @user 👋 We will never miss you!',
+      goodbyeMessage: 'Adeus @user 👋 Nunca vamos nos esquecer de você!',
       antiSpam: false,
       antidelete: false,
       nsfw: false,
@@ -62,15 +62,15 @@ module.exports = {
     
     // Message Configuration
     messages: {
-      wait: '⏳ Please wait...',
-      success: '✅ Success!',
-      error: '❌ Error occurred!',
-      ownerOnly: '👑 This command is only for bot owner!',
-      adminOnly: '🛡️ This command is only for group admins!',
-      groupOnly: '👥 This command can only be used in groups!',
-      privateOnly: '💬 This command can only be used in private chat!',
-      botAdminNeeded: '🤖 Bot needs to be admin to execute this command!',
-      invalidCommand: '❓ Invalid command! Type .menu for help'
+      wait: '⏳ Espere um pouco',
+      success: '✅ Sucesso!',
+      error: '❌ Ocorreu um erro!',
+      ownerOnly: '👑 Esse comando é apenas para o dono do bot!',
+      adminOnly: '🛡️ Esse comando é apenas para os admins do grupo!',
+      groupOnly: '👥 Esse comando é apenas para grupos!',
+      privateOnly: '💬 Esse comando é apenas para o privado!',
+      botAdminNeeded: '🤖 Bot precisa ser adm para executar esse comando!',
+      invalidCommand: '❓ Comando invalido! digite .menu para ver os comandos'
     },
     
     // Timezone

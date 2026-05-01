@@ -46,13 +46,8 @@ npm install
 
 Edite `config.js`:
 
-* **Opção A: Usar string de sessão**
 
-  ```js
-  sessionID: 'KnightBot!H4.....'
-  ```
-
-* **Opção B: Escanear QR**
+* **Escanear QR**
 
   ```js
   sessionID: ''
@@ -79,26 +74,6 @@ Quando o bot iniciar:
 * **Mr Unique Hacker** – Desenvolvedor principal e mantenedor do bot original
 * **Baileys** – Biblioteca da API do WhatsApp Web (`@whiskeysockets/baileys`)
 * Outras bibliotecas open source listadas em `package.json`
-
----
-
-## ☕ Apoie os desenvolvedores originais
-
-<div align="center">
-
-<a href="https://buymeacoffee.com/mruniquehacker" target="_blank">
-  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support%20Developer-FF813F?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white" alt="Buy Me a Coffee">
-</a>
-
-</div>
-
-Se você achou este projeto útil e quer apoiar o desenvolvedor, considere pagar um café! 
-
-<div align="center">
-
-<img src="utils/bmc_qr.png" alt="Buy Me a Coffee QR Code" width="200">
-
-</div>
 
 ---
 
