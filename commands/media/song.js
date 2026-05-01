@@ -21,45 +21,45 @@ module.exports = {
   name: 'song',
   aliases: ['play', 'music', 'yta'],
   category: 'media',
-  description: 'Download audio from YouTube',
-  usage: '.song <song name or YouTube link>',
-  
+  description: 'Baixar áudio do YouTube',
+  usage: '.song <nome da música ou link do YouTube>',
+
   async execute(sock, msg, args) {
     try {
       const text = args.join(' ');
       const chatId = msg.key.remoteJid;
-      
+
       if (!text) {
-        return await sock.sendMessage(chatId, { 
-          text: 'Usage: .song <song name or YouTube link>' 
+        return await sock.sendMessage(chatId, {
+          text: 'Uso: .song <nome da música ou link do YouTube>'
         }, { quoted: msg });
       }
-      
+
       let video;
-      
+
       if (text.includes('youtube.com') || text.includes('youtu.be')) {
         video = { url: text };
       } else {
         const search = await yts(text);
         if (!search || !search.videos.length) {
-          return await sock.sendMessage(chatId, { 
-            text: 'No results found.' 
+          return await sock.sendMessage(chatId, {
+            text: 'Nenhum resultado encontrado.'
           }, { quoted: msg });
         }
         video = search.videos[0];
       }
-      
+
       // Inform user
       await sock.sendMessage(chatId, {
         image: { url: video.thumbnail },
-        caption: `🎵 Downloading: *${video.title}*\n⏱ Duration: ${video.timestamp}`
+        caption: `🎵 Baixando: *${video.title}*\n⏱ Duração: ${video.timestamp}`
       }, { quoted: msg });
-      
+
       // Try multiple APIs with fallback chain
       let audioData;
       let audioBuffer;
       let downloadSuccess = false;
-      
+
       // List of API methods to try
       const apiMethods = [
         { name: 'EliteProTech', method: () => APIs.getEliteProTechDownloadByUrl(video.url) },
@@ -67,18 +67,18 @@ module.exports = {
         { name: 'Okatsu', method: () => APIs.getOkatsuDownloadByUrl(video.url) },
         { name: 'Izumi', method: () => APIs.getIzumiDownloadByUrl(video.url) }
       ];
-      
+
       // Try each API until we successfully download audio
       for (const apiMethod of apiMethods) {
         try {
           audioData = await apiMethod.method();
           const audioUrl = audioData.download || audioData.dl || audioData.url;
-          
+
           if (!audioUrl) {
             console.log(`${apiMethod.name} returned no download URL, trying next API...`);
             continue; // Try next API
           }
-          
+
           // Try to download the audio file - arraybuffer first
           try {
             const audioResponse = await axios.get(audioUrl, {
@@ -90,12 +90,12 @@ module.exports = {
               validateStatus: s => s >= 200 && s < 400,
               headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': '*/*',
-                'Accept-Encoding': 'identity'
+                                                  'Accept': '*/*',
+                                                  'Accept-Encoding': 'identity'
               }
             });
             audioBuffer = Buffer.from(audioResponse.data);
-            
+
             // Validate buffer
             if (audioBuffer && audioBuffer.length > 0) {
               downloadSuccess = true;
@@ -108,7 +108,7 @@ module.exports = {
               console.log(`Download blocked (451) from ${apiMethod.name}, trying next API...`);
               continue; // Try next API
             }
-            
+
             // Try stream mode as fallback for this URL
             try {
               const audioResponse = await axios.get(audioUrl, {
@@ -119,8 +119,8 @@ module.exports = {
                 validateStatus: s => s >= 200 && s < 400,
                 headers: {
                   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                  'Accept': '*/*',
-                  'Accept-Encoding': 'identity'
+                                                    'Accept': '*/*',
+                                                    'Accept-Encoding': 'identity'
                 }
               });
               const chunks = [];
@@ -130,7 +130,7 @@ module.exports = {
                 audioResponse.data.on('error', reject);
               });
               audioBuffer = Buffer.concat(chunks);
-              
+
               if (audioBuffer && audioBuffer.length > 0) {
                 downloadSuccess = true;
                 break; // Success! Exit the loop
@@ -152,15 +152,15 @@ module.exports = {
           continue;
         }
       }
-      
+
       // If all APIs failed, throw error
       if (!downloadSuccess || !audioBuffer) {
-        throw new Error('All download sources failed. The content may be unavailable or blocked in your region.');
+        throw new Error('Todas as fontes de download falharam. O conteúdo pode estar indisponível ou bloqueado na sua região.');
       }
 
       // Validate buffer
       if (!audioBuffer || audioBuffer.length === 0) {
-        throw new Error('Downloaded audio buffer is empty');
+        throw new Error('O buffer de áudio baixado está vazio');
       }
 
       // Detect actual file format from signature
@@ -174,7 +174,6 @@ module.exports = {
 
       // Check for MP4/M4A (ftyp box)
       if (asciiSignature === 'ftyp' || hexSignature.startsWith('000000')) {
-        // Check if it's M4A (audio/mp4)
         const ftypBox = audioBuffer.slice(4, 8).toString('ascii');
         if (ftypBox === 'ftyp') {
           detectedFormat = 'M4A/MP4';
@@ -182,99 +181,85 @@ module.exports = {
           fileExtension = 'm4a';
         }
       }
-      // Check for MP3 (ID3 tag or MPEG frame sync)
-      else if (audioBuffer.toString('ascii', 0, 3) === 'ID3' || 
-               (audioBuffer[0] === 0xFF && (audioBuffer[1] & 0xE0) === 0xE0)) {
+      else if (audioBuffer.toString('ascii', 0, 3) === 'ID3' ||
+        (audioBuffer[0] === 0xFF && (audioBuffer[1] & 0xE0) === 0xE0)) {
         detectedFormat = 'MP3';
-        actualMimetype = 'audio/mpeg';
-        fileExtension = 'mp3';
-      }
-      // Check for OGG/Opus
-      else if (audioBuffer.toString('ascii', 0, 4) === 'OggS') {
-        detectedFormat = 'OGG/Opus';
-        actualMimetype = 'audio/ogg; codecs=opus';
-        fileExtension = 'ogg';
-      }
-      // Check for WAV
-      else if (audioBuffer.toString('ascii', 0, 4) === 'RIFF') {
-        detectedFormat = 'WAV';
-        actualMimetype = 'audio/wav';
-        fileExtension = 'wav';
-      }
-      else {
-        // Default to M4A since that's what the signature often suggests
-        actualMimetype = 'audio/mp4';
-        fileExtension = 'm4a';
-        detectedFormat = 'Unknown (defaulting to M4A)';
-      }
-
-      // Convert to MP3 if not already MP3
-      let finalBuffer = audioBuffer;
-      let finalMimetype = 'audio/mpeg';
-      let finalExtension = 'mp3';
-
-      if (fileExtension !== 'mp3') {
-        try {
-          finalBuffer = await toAudio(audioBuffer, fileExtension);
-          if (!finalBuffer || finalBuffer.length === 0) {
-            throw new Error('Conversion returned empty buffer');
-          }
-          finalMimetype = 'audio/mpeg';
-          finalExtension = 'mp3';
-        } catch (convErr) {
-          throw new Error(`Failed to convert ${detectedFormat} to MP3: ${convErr.message}`);
+      actualMimetype = 'audio/mpeg';
+      fileExtension = 'mp3';
         }
-      }
+        else if (audioBuffer.toString('ascii', 0, 4) === 'OggS') {
+          detectedFormat = 'OGG/Opus';
+          actualMimetype = 'audio/ogg; codecs=opus';
+          fileExtension = 'ogg';
+        }
+        else if (audioBuffer.toString('ascii', 0, 4) === 'RIFF') {
+          detectedFormat = 'WAV';
+          actualMimetype = 'audio/wav';
+          fileExtension = 'wav';
+        }
+        else {
+          actualMimetype = 'audio/mp4';
+          fileExtension = 'm4a';
+          detectedFormat = 'Desconhecido (padrão para M4A)';
+        }
 
-      // Send buffer as MP3
-      await sock.sendMessage(chatId, {
-        audio: finalBuffer,
-        mimetype: finalMimetype,
-        fileName: `${(audioData.title || video.title || 'song').replace(/[^\w\s-]/g, '')}.${finalExtension}`,
-        ptt: false
-      }, { quoted: msg });
+        let finalBuffer = audioBuffer;
+        let finalMimetype = 'audio/mpeg';
+        let finalExtension = 'mp3';
 
-      // Cleanup: Delete temp files created during conversion
-      try {
-        const tempDir = path.join(__dirname, '../../temp');
-        if (fs.existsSync(tempDir)) {
-          const files = fs.readdirSync(tempDir);
-          const now = Date.now();
-          files.forEach(file => {
-            const filePath = path.join(tempDir, file);
-            try {
-              const stats = fs.statSync(filePath);
-              // Delete temp files older than 10 seconds (conversion temp files)
-              if (now - stats.mtimeMs > 10000) {
-                // Check if it's a temp audio file (mp3, m4a, or numeric timestamp files from converter)
-                if (file.endsWith('.mp3') || file.endsWith('.m4a') || /^\d+\.(mp3|m4a)$/.test(file)) {
-                  fs.unlinkSync(filePath);
-                }
-              }
-            } catch (e) {
-              // Ignore individual file errors
+        if (fileExtension !== 'mp3') {
+          try {
+            finalBuffer = await toAudio(audioBuffer, fileExtension);
+            if (!finalBuffer || finalBuffer.length === 0) {
+              throw new Error('A conversão retornou um buffer vazio');
             }
-          });
+            finalMimetype = 'audio/mpeg';
+            finalExtension = 'mp3';
+          } catch (convErr) {
+            throw new Error(`Falha ao converter ${detectedFormat} para MP3: ${convErr.message}`);
+          }
         }
-      } catch (cleanupErr) {
-        // Ignore cleanup errors
-      }
-      
+
+        await sock.sendMessage(chatId, {
+          audio: finalBuffer,
+          mimetype: finalMimetype,
+          fileName: `${(audioData.title || video.title || 'musica').replace(/[^\w\s-]/g, '')}.${finalExtension}`,
+                               ptt: false
+        }, { quoted: msg });
+
+        try {
+          const tempDir = path.join(__dirname, '../../temp');
+          if (fs.existsSync(tempDir)) {
+            const files = fs.readdirSync(tempDir);
+            const now = Date.now();
+            files.forEach(file => {
+              const filePath = path.join(tempDir, file);
+              try {
+                const stats = fs.statSync(filePath);
+                if (now - stats.mtimeMs > 10000) {
+                  if (file.endsWith('.mp3') || file.endsWith('.m4a') || /^\d+\.(mp3|m4a)$/.test(file)) {
+                    fs.unlinkSync(filePath);
+                  }
+                }
+              } catch (e) {}
+            });
+          }
+        } catch (cleanupErr) {}
+
     } catch (err) {
       console.error('Song command error:', err);
-      
-      // Provide more specific error messages
-      let errorMessage = '❌ Failed to download song.';
+
+      let errorMessage = '❌ Falha ao baixar a música.';
       if (err.message && err.message.includes('blocked')) {
-        errorMessage = '❌ Download blocked. The content may be unavailable in your region or due to legal restrictions.';
+        errorMessage = '❌ Download bloqueado. O conteúdo pode estar indisponível na sua região ou por restrições legais.';
       } else if (err.response?.status === 451 || err.status === 451) {
-        errorMessage = '❌ Content unavailable (451). This may be due to legal restrictions or regional blocking.';
+        errorMessage = '❌ Conteúdo indisponível (451). Pode ser devido a restrições legais ou bloqueio regional.';
       } else if (err.message && err.message.includes('All download sources failed')) {
-        errorMessage = '❌ All download sources failed. The content may be unavailable or blocked.';
+        errorMessage = '❌ Todas as fontes de download falharam. O conteúdo pode estar indisponível ou bloqueado.';
       }
-      
-      await sock.sendMessage(msg.key.remoteJid, { 
-        text: errorMessage 
+
+      await sock.sendMessage(msg.key.remoteJid, {
+        text: errorMessage
       }, { quoted: msg });
     }
   }

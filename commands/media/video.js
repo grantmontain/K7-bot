@@ -10,8 +10,8 @@ module.exports = {
   name: 'ytvideo',
   aliases: ['ytv', 'ytmp4', 'ytvid', 'video'],
   category: 'media',
-  description: 'Download video from YouTube',
-  usage: '.video <video name or URL>',
+  description: 'Baixar vídeo do YouTube',
+  usage: '.video <nome do vídeo ou URL>',
 
   async execute(sock, msg, args) {
     try {
@@ -25,7 +25,7 @@ module.exports = {
 
       if (!searchQuery) {
         return await sock.sendMessage(chatId, {
-          text: 'What video do you want to download?'
+          text: 'Qual vídeo você quer baixar?'
         }, { quoted: msg });
       }
 
@@ -41,7 +41,7 @@ module.exports = {
         const { videos } = await yts(searchQuery);
         if (!videos || videos.length === 0) {
           return await sock.sendMessage(chatId, {
-            text: 'No videos found!'
+            text: 'Nenhum vídeo encontrado!'
           }, { quoted: msg });
         }
         videoUrl = videos[0].url;
@@ -57,7 +57,7 @@ module.exports = {
         if (thumb) {
           await sock.sendMessage(chatId, {
             image: { url: thumb },
-            caption: `*${captionTitle}*\nDownloading...`
+            caption: `*${captionTitle}*\nBaixando...`
           }, { quoted: msg });
         }
       } catch (e) {
@@ -68,7 +68,7 @@ module.exports = {
       let urls = videoUrl.match(/(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch\?v=|v\/|embed\/|shorts\/|playlist\?list=)?)([a-zA-Z0-9_-]{11})/gi);
       if (!urls) {
         return await sock.sendMessage(chatId, {
-          text: 'This is not a valid YouTube link!'
+          text: 'Este não é um link válido do YouTube!'
         }, { quoted: msg });
       }
 
@@ -89,13 +89,13 @@ module.exports = {
         video: { url: videoData.download },
         mimetype: 'video/mp4',
         fileName: `${(videoData.title || videoTitle || 'video').replace(/[^\w\s-]/g, '')}.mp4`,
-        caption: `*${videoData.title || videoTitle || 'Video'}*\n\n> *_Downloaded by ${instanceConfig.botName}_*`
+                             caption: `*${videoData.title || videoTitle || 'Vídeo'}*\n\n> *_Baixado por ${instanceConfig.botName}_*`
       }, { quoted: msg });
 
     } catch (error) {
       console.error('[VIDEO] Command Error:', error?.message || error);
       await sock.sendMessage(msg.key.remoteJid, {
-        text: 'Download failed: ' + (error?.message || 'Unknown error')
+        text: 'Falha no download: ' + (error?.message || 'Erro desconhecido')
       }, { quoted: msg });
     }
   }
