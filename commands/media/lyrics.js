@@ -1,7 +1,3 @@
-/**
- * Lyrics Finder
- */
-
 const axios = require('axios');
 const config = require('../../config');
 
@@ -21,38 +17,53 @@ module.exports = {
       }
 
       const query = args.join(' ');
-
       let lyricsData = null;
 
-      // API 1: Vreden
+      const headers = {
+        'User-Agent': 'Mozilla/5.0'
+      };
+
+      // API 1
       try {
-        const response = await axios.get(`https://api.vreden.my.id/api/lyrics?query=${encodeURIComponent(query)}`);
-        if (response.data && response.data.result) {
+        const res = await axios.get(`https://api.vreden.my.id/api/lyrics`, {
+          params: { query },
+          headers
+        });
+
+        console.log('Vreden:', res.data);
+
+        if (res.data?.result?.lyrics) {
           lyricsData = {
-            title: response.data.result.title,
-            artist: response.data.result.artist,
-            lyrics: response.data.result.lyrics,
-            thumbnail: response.data.result.thumbnail
+            title: res.data.result.title,
+            artist: res.data.result.artist,
+            lyrics: res.data.result.lyrics,
+            thumbnail: res.data.result.thumbnail
           };
         }
-      } catch (err) {
-        console.log('Vreden API failed, trying next...');
+      } catch (e) {
+        console.log('Vreden morreu:', e.message);
       }
 
-      // API 2: Siputzx (fallback)
+      // API 2
       if (!lyricsData) {
         try {
-          const response = await axios.get(`https://api.siputzx.my.id/api/s/lyrics?query=${encodeURIComponent(query)}`);
-          if (response.data && response.data.status && response.data.data) {
+          const res = await axios.get(`https://api.siputzx.my.id/api/s/lyrics`, {
+            params: { query },
+            headers
+          });
+
+          console.log('Siputzx:', res.data);
+
+          if (res.data?.data?.lyrics) {
             lyricsData = {
-              title: response.data.data.title,
-              artist: response.data.data.artist,
-              lyrics: response.data.data.lyrics,
-              thumbnail: response.data.data.image
+              title: res.data.data.title,
+              artist: res.data.data.artist,
+              lyrics: res.data.data.lyrics,
+              thumbnail: res.data.data.image
             };
           }
-        } catch (err) {
-          console.log('Siputzx API failed');
+        } catch (e) {
+          console.log('Siputzx morreu:', e.message);
         }
       }
 
@@ -62,30 +73,29 @@ module.exports = {
         });
       }
 
-      // Format lyrics (limit to prevent message too long)
       let lyrics = lyricsData.lyrics;
       if (lyrics.length > 4000) {
-        lyrics = lyrics.substring(0, 4000) + '...\n\n_Letra muito longa, exibindo apenas a primeira parte_';
+        lyrics = lyrics.slice(0, 4000) + '\n\n(...continua)';
       }
 
-      const caption = `🎵 *${lyricsData.title}*\n` +
-      `👤 *Artista:* ${lyricsData.artist}\n\n` +
-      `📝 *Letra:*\n${lyrics}\n\n` +
-      `_Obtido por ${config.botName}_`;
+      const caption =
+      `🎵 *${lyricsData.title}*
+      👤 *Artista:* ${lyricsData.artist}
 
-      if (lyricsData.thumbnail) {
-        await sock.sendMessage(msg.key.remoteJid, {
-          image: { url: lyricsData.thumbnail },
-          caption: caption
-        });
-      } else {
-        await sock.sendMessage(msg.key.remoteJid, { text: caption });
-      }
+      📝 *Letra:*
+      ${lyrics}
+
+      _Obtido por ${config.botName}_`;
+
+      await sock.sendMessage(msg.key.remoteJid, {
+        image: lyricsData.thumbnail ? { url: lyricsData.thumbnail } : undefined,
+        caption
+      });
 
     } catch (error) {
-      console.error('Lyrics command error:', error);
+      console.error('Lyrics error:', error);
       await sock.sendMessage(msg.key.remoteJid, {
-        text: '❌ Ocorreu um erro ao buscar a letra!'
+        text: '❌ Erro ao buscar a letra!'
       });
     }
   }
