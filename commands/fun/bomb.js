@@ -12,7 +12,7 @@ module.exports = {
   aliases: ['bom'],
   category: 'fun',
   description: 'Play bomb game - pick numbers 1-9, avoid the bomb!',
-  usage: '.bomb',
+  usage: '.bomba',
   
   async execute(sock, msg, args, extra) {
     try {
