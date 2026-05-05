@@ -22,8 +22,18 @@ module.exports = {
 
       const [mentionRaw, quotedText, responseText] = parts;
 
-      // Extrai número do @
-      const mentionedId = mentionRaw.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+      const ctx = msg.message?.extendedTextMessage?.contextInfo || {};
+      const mentioned = ctx.mentionedJid || [];
+
+      let mentionedId = null;
+
+      if (mentioned.length) {
+        mentionedId = mentioned[0];
+      } else {
+        return await sock.sendMessage(chatId, {
+          text: 'Você precisa marcar alguém corretamente.'
+        }, { quoted: msg });
+      }
 
       if (quotedText.length < 2) {
         return await sock.sendMessage(chatId, {
