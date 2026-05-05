@@ -30,7 +30,7 @@ module.exports = {
 
             if (dice > 50) {
                 return await sock.sendMessage(chatId, {
-                    text: 'Calma lá, você não está jogando Warhammer. Máximo: 50 dados.'
+                    text: 'Máximo: 50 dados.'
                 }, { quoted: msg });
             }
 
