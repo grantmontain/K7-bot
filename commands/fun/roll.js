@@ -46,15 +46,22 @@ module.exports = {
                 results.push(roll);
                 total += roll;
             }
+            const ctx = msg.message?.extendedTextMessage?.contextInfo || {};
+            const mentioned = ctx.mentionedJid || [];
 
-            const senderName = msg.pushName || 'Usuário';
+            let targetId = null;
 
-            let response = `🎲 *${senderName} rolou ${dice}d${sides}*\n\n`;
+            if (mentioned.length) targetId = mentioned[0];
+            else if (ctx.participant) targetId = ctx.participant;
+            else targetId = extra.sender;
+
+            const targetTag = `@${targetId.split('@')[0]}`;
+
+            let response = `🎲 *${targetTag} rolou ${dice}d${sides}*\n\n`;
 
             response += `Resultados: [ ${results.join(', ')} ]\n`;
             response += `Total: *${total}*`;
 
-            // pequeno drama se for 1d20
             if (dice === 1 && sides === 20) {
                 if (results[0] === 20) {
                     response += '\n\n🔥 CRÍTICO!';
@@ -64,7 +71,8 @@ module.exports = {
             }
 
             await sock.sendMessage(chatId, {
-                text: response
+                text: response,
+                mentions: [targetId]
             }, { quoted: msg });
 
         } catch (error) {
