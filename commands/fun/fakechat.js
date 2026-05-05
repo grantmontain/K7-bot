@@ -1,58 +1,66 @@
-module.export = {
-  name: 'fake-chat',
-  aliases: ['fakechat'],
+// commands/fun/fakechat.js
+module.exports = {
+  name: 'fakechat',
+  aliases: ['fake-chat', 'fq', 'fake-quote', 'f-quote', 'fk'],
   category: 'fun',
   description: 'Cria uma citação falsa mencionando um usuário',
-  usage: `.fake-chat @user / texto citado / mensagem que será enviada`,
-  /**
-   * @param {CommandHandleProps} props
-   */
-  handle: async ({ remoteJid, socket, args }) => {
-    if (args.length !== 3) {
-      throw new InvalidParameterError(
-        `Uso incorreto do comando. Exemplo: ${PREFIX}fake-chat @usuário / texto citado / mensagem que será enviada`
-      );
-    }
+  usage: '.fakechat @usuario / texto citado / resposta',
 
-    const quotedText = args[1];
-    const responseText = args[2];
+  async execute(sock, msg, args, extra) {
+    try {
+      const chatId = extra.from;
 
-    const mentionedLid = args[0]
-      ? `${args[0].replace(/[^0-9]/g, "")}@lid`
-      : null;
+      // Junta tudo e separa pelo "/"
+      const fullText = args.join(' ');
+      const parts = fullText.split('/').map(p => p.trim());
 
-    if (quotedText.length < 2) {
-      throw new InvalidParameterError(
-        "O texto citado deve ter pelo menos 2 caracteres."
-      );
-    }
+      if (parts.length !== 3) {
+        return await sock.sendMessage(chatId, {
+          text: 'Uso incorreto.\nExemplo: .fakechat @usuario / texto citado / resposta'
+        }, { quoted: msg });
+      }
 
-    if (responseText.length < 2) {
-      throw new InvalidParameterError(
-        "A mensagem de resposta deve ter pelo menos 2 caracteres."
-      );
-    }
+      const [mentionRaw, quotedText, responseText] = parts;
 
-    const fakeQuoted = {
-      key: {
-        fromMe: false,
-        participant: mentionedLid,
-        remoteJid,
-      },
-      message: {
-        extendedTextMessage: {
-          text: quotedText,
-          contextInfo: {
-            mentionedJid: [mentionedLid],
+      // Extrai número do @
+      const mentionedId = mentionRaw.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+
+      if (quotedText.length < 2) {
+        return await sock.sendMessage(chatId, {
+          text: 'O texto citado deve ter pelo menos 2 caracteres.'
+        }, { quoted: msg });
+      }
+
+      if (responseText.length < 2) {
+        return await sock.sendMessage(chatId, {
+          text: 'A resposta deve ter pelo menos 2 caracteres.'
+        }, { quoted: msg });
+      }
+
+      const fakeQuoted = {
+        key: {
+          fromMe: false,
+          participant: mentionedId,
+          remoteJid: chatId,
+        },
+        message: {
+          extendedTextMessage: {
+            text: quotedText,
+            contextInfo: {
+              mentionedJid: [mentionedId],
+            },
           },
         },
-      },
-    };
+      };
 
-    await socket.sendMessage(
-      remoteJid,
-      { text: responseText },
-      { quoted: fakeQuoted }
-    );
-  },
+      await sock.sendMessage(chatId, {
+        text: responseText,
+        mentions: [mentionedId]
+      }, { quoted: fakeQuoted });
+
+    } catch (error) {
+      console.error('[FAKECHAT] ERROR:', error);
+      await extra.reply('❌ Algo deu errado.');
+    }
+  }
 };
