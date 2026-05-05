@@ -1,11 +1,8 @@
-import { PREFIX } from "../../config.js";
-import { InvalidParameterError } from "../../errors/index.js";
-
-export default {
+module.export = {
   name: "fake-chat",
   description: "Cria uma citação falsa mencionando um usuário",
   commands: ["fake-chat", "fq", "fake-quote", "f-quote", "fk"],
-  usage: `${PREFIX}fake-chat @usuário / texto citado / mensagem que será enviada`,
+  usage: `.fake-chat @usuário / texto citado / mensagem que será enviada`,
   /**
    * @param {CommandHandleProps} props
    */
