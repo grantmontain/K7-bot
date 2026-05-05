@@ -1,8 +1,9 @@
 module.export = {
-  name: "fake-chat",
-  description: "Cria uma citação falsa mencionando um usuário",
-  commands: ["fake-chat", "fq", "fake-quote", "f-quote", "fk"],
-  usage: `.fake-chat @usuário / texto citado / mensagem que será enviada`,
+  name: 'fake-chat',
+  aliases: ['fakechat'],
+  category: 'fun',
+  description: 'Cria uma citação falsa mencionando um usuário',
+  usage: `.fake-chat @user / texto citado / mensagem que será enviada`,
   /**
    * @param {CommandHandleProps} props
    */
