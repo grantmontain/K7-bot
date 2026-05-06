@@ -9,7 +9,18 @@ module.exports = {
     async execute(sock, msg, args, extra) {
         try {
             const chatId = extra.from;
-            const input = args[0];
+            const input = args.join('').toLowerCase();
+
+            let dicePart = input;
+            let bonus = 0;
+
+            if (input.includes('+')) {
+                const parts = input.split('+');
+                dicePart = parts[0];
+                bonus = parseInt(parts[1]);
+
+                if (isNaN(bonus)) bonus = 0;
+            }
 
             if (!input || !input.includes('d')) {
                 return await sock.sendMessage(chatId, {
@@ -59,8 +70,17 @@ module.exports = {
 
             let response = `🎲 *${targetTag} rolou ${dice}d${sides}*\n\n`;
 
+            total += bonus;
+
             response += `Resultados: [ ${results.join(', ')} ]\n`;
-            response += `Total: *${total}*`;
+            //response += `Total: *${total}*`;
+            response += `Subtotal: ${results.join(' + ')}`;
+
+            if (bonus > 0) {
+                response += ` + ${bonus}`;
+            }
+
+            response += `\nTotal: *${total}*`;
 
             if (dice === 1 && sides === 20) {
                 if (results[0] === 20) {
