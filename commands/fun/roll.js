@@ -12,15 +12,22 @@ module.exports = {
             const input = args.join('').toLowerCase();
 
             let dicePart = input;
-            let bonus = 0;
+            let modifier = 0;
+            let operator = null;
 
-            if (input.includes('+')) {
-                const parts = input.split('+');
-                dicePart = parts[0];
-                bonus = parseInt(parts[1]);
+            const operators = ['+', '-', '*', '/'];
 
-                if (isNaN(bonus)) bonus = 0;
+            for (const op of operators) {
+                if (input.includes(op)) {
+                    const parts = input.split(op);
+                    dicePart = parts[0];
+                    modifier = parseFloat(parts[1]);
+                    operator = op;
+                    break;
+                }
             }
+
+            if (isNaN(modifier)) modifier = 0;
 
             if (!input || !input.includes('d')) {
                 return await sock.sendMessage(chatId, {
@@ -70,14 +77,31 @@ module.exports = {
 
             let response = `🎲 *${targetTag} rolou ${dice}d${sides}*\n\n`;
 
-            total += bonus;
+            let finalTotal = total;
+
+            if (operator) {
+                switch (operator) {
+                    case '+':
+                        finalTotal = total + modifier;
+                        break;
+                    case '-':
+                        finalTotal = total - modifier;
+                        break;
+                    case '*':
+                        finalTotal = total * modifier;
+                        break;
+                    case '/':
+                        finalTotal = total / modifier;
+                        break;
+                }
+            }
 
             response += `Resultados:  ${results.join(', ')} \n`;
             //response += `Total: *${total}*`;
             //response += `Subtotal: ${results.join(' + ')}`;
 
-            if (bonus > 0) {
-                response += `\nBônus ${bonus}`;
+            if (operator) {
+                response += `\nBônus: ${operator} ${modifier}`;
             }
 
             response += `\nTotal: *${total}*`;
