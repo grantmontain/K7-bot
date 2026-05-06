@@ -96,7 +96,7 @@ module.exports = {
                 }
             }
 
-            response += `Resultados:  ${results.join('+ ')} = *${total}* \n`;
+            response += `Resultados:  ${results.join(' + ')} = *${total}* \n`;
             //response += `Total: *${total}*`;
             //response += `Subtotal: ${results.join(' + ')}`;
 
