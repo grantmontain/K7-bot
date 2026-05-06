@@ -101,7 +101,7 @@ module.exports = {
             //response += `Subtotal: ${results.join(' + ')}`;
 
             if (operator) {
-                response += `\nBônus: ${operator} ${modifier}`;
+                response += `\nBônus: ${operator}${modifier}`;
             }
 
             response += `\nTotal: *${total}*`;
