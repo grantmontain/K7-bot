@@ -104,7 +104,7 @@ module.exports = {
                 response += `\nBônus: ${operator}${modifier}`;
             }
 
-            response += `\nTotal: *${total}*`;
+            response += `\nTotal: *${finalTotal}*`;
 
             if (dice === 1 && sides === 20) {
                 if (results[0] === 20) {
