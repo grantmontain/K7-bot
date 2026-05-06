@@ -28,11 +28,11 @@ module.exports = {
                 }, { quoted: msg });
             }
 
-            if (dice > 50) {
-                return await sock.sendMessage(chatId, {
+            //if (dice > 50) {
+            //    return await sock.sendMessage(chatId, {
                     text: 'Máximo: 50 dados.'
-                }, { quoted: msg });
-            }
+            //    }, { quoted: msg });
+            //}
 
             await sock.sendMessage(chatId, {
                 text: '🎲 Rolando os dados...'
