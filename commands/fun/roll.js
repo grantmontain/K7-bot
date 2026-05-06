@@ -72,12 +72,12 @@ module.exports = {
 
             total += bonus;
 
-            response += `Resultados: [ ${results.join(', ')} ]\n`;
+            response += `Resultados:  ${results.join(', ')} \n`;
             //response += `Total: *${total}*`;
-            response += `Subtotal: ${results.join(' + ')}`;
+            //response += `Subtotal: ${results.join(' + ')}`;
 
             if (bonus > 0) {
-                response += ` + ${bonus}`;
+                response += `\nBônus ${bonus}`;
             }
 
             response += `\nTotal: *${total}*`;
