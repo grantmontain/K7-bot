@@ -20,16 +20,9 @@ module.exports = {
 
     async execute(sock, msg, args, extra) {
         try {
-
-            // Carrega frases
             let frases = JSON.parse(fs.readFileSync(dbPath));
 
-            // =========================
-            // Verifica admin do grupo
-            // =========================
             let isAdmin = false;
-
-            // Só verifica se for grupo
             if (extra.isGroup) {
 
                 const groupMetadata = await sock.groupMetadata(extra.from);
@@ -41,9 +34,6 @@ module.exports = {
                 isAdmin = admins.includes(extra.sender);
             }
 
-            // =========================
-            // .ks2 add
-            // =========================
             if (args[0]?.toLowerCase() === 'add') {
 
                 if (!isAdmin) {
@@ -68,9 +58,6 @@ module.exports = {
                 return await extra.reply('✅ Frase adicionada.');
             }
 
-            // =========================
-            // .ks2 list
-            // =========================
             if (args[0]?.toLowerCase() === 'list') {
 
                 if (!frases.length) {
@@ -94,9 +81,6 @@ module.exports = {
                 );
             }
 
-            // =========================
-            // .ks2
-            // =========================
             if (!frases.length) {
                 return await extra.reply('📭 O banco de dados está vazio.');
             }
