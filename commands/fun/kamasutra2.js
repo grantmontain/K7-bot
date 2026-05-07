@@ -75,7 +75,7 @@ module.exports = {
 
                 if (!frases.length) {
                     return await extra.reply(
-                        '📭 Nenhuma frase cadastrada.'
+                        'Nenhuma frase cadastrada.'
                     );
                 }
 
@@ -87,7 +87,7 @@ module.exports = {
 
                 if (isNaN(numero) || numero < 1 || numero > lista.length) {
                     let texto = '❌ Número inválido.\n\n';
-                    texto += '📚 Lista de frases:\n\n';
+                    texto += 'Lista de frases:\n\n';
 
                     lista.forEach((frase, index) => {
                         texto += `${index + 1}. ${frase}\n`;
@@ -111,7 +111,7 @@ module.exports = {
                 );
 
                 return await extra.reply(
-                    `🗑️ Frase removida:\n\n"${fraseRemovida}"`
+                    `Frase removida:\n\n"${fraseRemovida}"`
                 );
             }
 
@@ -125,7 +125,7 @@ module.exports = {
                 a.localeCompare(b)
                 );
 
-                let texto = '📚 Lista de frases:\n\n';
+                let texto = 'Lista de frases:\n\n';
 
                 lista.forEach((frase, index) => {
                     texto += `${index + 1}. ${frase}\n`;
@@ -139,7 +139,7 @@ module.exports = {
             }
 
             if (!frases.length) {
-                return await extra.reply('📭 O banco de dados está vazio.');
+                return await extra.reply('O banco de dados está vazio.');
             }
 
             const fraseAleatoria =
