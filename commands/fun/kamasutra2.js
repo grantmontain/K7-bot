@@ -58,6 +58,63 @@ module.exports = {
                 return await extra.reply('✅ Frase adicionada.');
             }
 
+            // =========================
+            // .ks2 del
+            // =========================
+            if (
+                args[0]?.toLowerCase() === 'del' ||
+                args[0]?.toLowerCase() === 'delete' ||
+                args[0]?.toLowerCase() === 'remove'
+            ) {
+
+                if (!isAdmin) {
+                    return await extra.reply(
+                        '❌ Apenas admins podem apagar frases.'
+                    );
+                }
+
+                if (!frases.length) {
+                    return await extra.reply(
+                        '📭 Nenhuma frase cadastrada.'
+                    );
+                }
+
+                const lista = [...frases].sort((a, b) =>
+                a.localeCompare(b)
+                );
+
+                const numero = parseInt(args[1]);
+
+                if (isNaN(numero) || numero < 1 || numero > lista.length) {
+                    let texto = '❌ Número inválido.\n\n';
+                    texto += '📚 Lista de frases:\n\n';
+
+                    lista.forEach((frase, index) => {
+                        texto += `${index + 1}. ${frase}\n`;
+                    });
+
+                    return await sock.sendMessage(
+                        extra.from,
+                        { text: texto },
+                        { quoted: msg }
+                    );
+                }
+
+                const fraseRemovida = lista[numero - 1];
+
+
+                frases = frases.filter(f => f !== fraseRemovida);
+
+                fs.writeFileSync(
+                    dbPath,
+                    JSON.stringify(frases, null, 2)
+                );
+
+                return await extra.reply(
+                    `🗑️ Frase removida:\n\n"${fraseRemovida}"`
+                );
+            }
+
             if (args[0]?.toLowerCase() === 'list') {
 
                 if (!frases.length) {
