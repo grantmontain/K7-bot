@@ -2,11 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
+
+// Caminho do banco
 const dbPath = path.join(__dirname, '../../database/kamasutra2.json');
+
+// Cria o banco caso não exista
 if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, JSON.stringify([], null, 2));
 }
-const isAdmin = extra.isAdmin || extra.isGroupAdmin || false;
 
 module.exports = {
     name: 'kamasutra2',
@@ -17,36 +20,66 @@ module.exports = {
 
     async execute(sock, msg, args, extra) {
         try {
+
+            // Carrega frases
             let frases = JSON.parse(fs.readFileSync(dbPath));
+
+            // =========================
+            // Verifica admin do grupo
+            // =========================
+            let isAdmin = false;
+
+            // Só verifica se for grupo
+            if (extra.isGroup) {
+
+                const groupMetadata = await sock.groupMetadata(extra.from);
+
+                const admins = groupMetadata.participants
+                .filter(p => p.admin !== null)
+                .map(p => p.id);
+
+                isAdmin = admins.includes(extra.sender);
+            }
+
+            // =========================
+            // .ks2 add
+            // =========================
             if (args[0]?.toLowerCase() === 'add') {
 
                 if (!isAdmin) {
                     return await extra.reply('❌ Apenas admins podem adicionar frases.');
                 }
+
                 const frase = args.slice(1).join(' ').trim();
 
                 if (!frase) {
-                    return await extra.reply('❌ Digite uma frase para adicionar.');
+                    return await extra.reply('❌ Digite uma frase.');
                 }
 
+                // Evita duplicatas
                 if (frases.includes(frase)) {
-                    return await extra.reply('Calma ae porra, essa frase já existe');
+                    return await extra.reply('⚠️ Essa frase já existe.');
                 }
 
                 frases.push(frase);
 
                 fs.writeFileSync(dbPath, JSON.stringify(frases, null, 2));
 
-                return await extra.reply('✅ Frase adicionada ao *KAMASUTRA 2*');
+                return await extra.reply('✅ Frase adicionada.');
             }
 
+            // =========================
+            // .ks2 list
+            // =========================
             if (args[0]?.toLowerCase() === 'list') {
 
                 if (!frases.length) {
-                    return await extra.reply('📭 Nenhuma frase');
+                    return await extra.reply('📭 Nenhuma frase cadastrada.');
                 }
 
-                const lista = [...frases].sort((a, b) => a.localeCompare(b));
+                const lista = [...frases].sort((a, b) =>
+                a.localeCompare(b)
+                );
 
                 let texto = '📚 Lista de frases:\n\n';
 
@@ -60,8 +93,12 @@ module.exports = {
                     { quoted: msg }
                 );
             }
+
+            // =========================
+            // .ks2
+            // =========================
             if (!frases.length) {
-                return await extra.reply('não há nada');
+                return await extra.reply('📭 O banco de dados está vazio.');
             }
 
             const fraseAleatoria =
@@ -75,7 +112,10 @@ module.exports = {
 
         } catch (error) {
             console.error('[kamasutra2] ERROR:', error);
-            await extra.reply('❌ Algo deu errado.');
+
+            await extra.reply(
+                '❌ Algo deu errado no comando.'
+            );
         }
     }
 };
