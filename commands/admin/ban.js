@@ -8,7 +8,7 @@ const config = require('../../config');
 const handler = require('../../handler');
 
 module.exports = {
-  name: 'kick',
+  name: 'ban',
   aliases: ['remove'],
   category: 'admin',
   description: 'Kick mentioned/replied members from the group',
