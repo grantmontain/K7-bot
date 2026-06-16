@@ -1,61 +1,43 @@
 // commands/admin/groupstats.js
 
-const { getStats, getAllTimeStats } = require('../../utils/groupStats');
+const { getStats } = require('../../utils/groupstats');
 
 module.exports = {
     name: 'groupstats',
     aliases: ['stats', 'leaderboard', 'gstats', 'topmembers', 'msgs', 'messagestats'],
     category: 'general',
-    description: 'Mostra estatísticas do grupo (hoje ou todo o tempo)',
-    usage: '.groupstats [hoje|total]',
+    description: 'Show today\'s group chat statistics',
+    usage: '.groupstats',
     groupOnly: true,
 
     async execute(sock, msg, args, extra) {
         try {
             const from = extra.from;
-            
-            // Verificar qual período o usuário quer (padrão: hoje)
-            const period = args[0] ? args[0].toLowerCase() : 'hoje';
-            let stats;
-            let periodoTexto;
-            
-            if (period === 'total' || period === 'todo' || period === 'all' || period === 'geral') {
-                stats = getAllTimeStats(from);
-                periodoTexto = 'Todo o Tempo';
-            } else {
-                stats = getStats(from);
-                periodoTexto = 'Hoje';
-            }
+            const stats = getStats(from);
 
-            if (!stats || stats.total === 0) {
-                if (periodoTexto === 'Hoje') {
-                    return extra.reply('📊 Nenhuma atividade registrada hoje neste grupo.');
-                } else {
-                    return extra.reply('📊 Nenhuma atividade registrada neste grupo ainda.');
-                }
-            }
+            if (!stats)
+                return extra.reply('📊 No activity recorded today.');
 
             const { total, users } = stats;
 
-            // Top membros (top 5)
+            // top members
             const sortedUsers = Object.entries(users)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 5);
 
             let topText = sortedUsers.length
-                ? sortedUsers.map(([id, count], i) => `${i + 1}) @${id.split('@')[0]} — ${count} ${count === 1 ? 'mensagem' : 'mensagens'}`).join('\n')
-                : 'Nenhum usuário ativo ainda.';
+                ? sortedUsers.map(([id, count], i) => `${i + 1}) @${id.split('@')[0]} — ${count} msgs`).join('\n')
+                : 'No active users yet.';
 
             const text = `
-📊 *Estatísticas do Grupo — ${periodoTexto}*
+📊 *Group Stats — Today*
 
-📌 *Total de Mensagens:* ${total}
+📌 *Total Messages:* ${total}
 
-👥 *Membros Mais Ativos:*
+👥 *Top Active Members:*
 ${topText}
 
-💡 Use .myactivity para ver suas estatísticas pessoais.
-💡 Use .groupstats total para ver estatísticas de todo o tempo.
+Type .myactivity to see your stats.
 `.trim();
 
             await sock.sendMessage(from, {
@@ -64,78 +46,8 @@ ${topText}
             }, { quoted: msg });
 
         } catch (err) {
-            console.error('[groupstats cmd] erro:', err);
-            extra.reply('❌ Erro ao carregar as estatísticas do grupo.');
-        }
-    }
-};// commands/admin/groupstats.js
-
-const { getStats, getAllTimeStats } = require('../../utils/groupstats');
-
-module.exports = {
-    name: 'groupstats',
-    aliases: ['stats', 'leaderboard', 'gstats', 'topmembers', 'msgs', 'messagestats'],
-    category: 'general',
-    description: 'Mostra estatísticas do grupo (hoje ou todo o tempo)',
-    usage: '.groupstats [hoje|total]',
-    groupOnly: true,
-
-    async execute(sock, msg, args, extra) {
-        try {
-            const from = extra.from;
-            
-            // Verificar qual período o usuário quer (padrão: hoje)
-            const period = args[0] ? args[0].toLowerCase() : 'hoje';
-            let stats;
-            let periodoTexto;
-            
-            if (period === 'total' || period === 'todo' || period === 'all' || period === 'geral') {
-                stats = getAllTimeStats(from);
-                periodoTexto = 'Todo o Tempo';
-            } else {
-                stats = getStats(from);
-                periodoTexto = 'Hoje';
-            }
-
-            if (!stats || stats.total === 0) {
-                if (periodoTexto === 'Hoje') {
-                    return extra.reply('📊 Nenhuma atividade registrada hoje.');
-                } else {
-                    return extra.reply('📊 Nenhuma atividade registrada neste grupo ainda.');
-                }
-            }
-
-            const { total, users } = stats;
-
-            // Top membros (top 5)
-            const sortedUsers = Object.entries(users)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5);
-
-            let topText = sortedUsers.length
-                ? sortedUsers.map(([id, count], i) => `${i + 1}) @${id.split('@')[0]} — ${count} ${count === 1 ? 'msg' : 'msgs'}`).join('\n')
-                : 'Nenhum usuário ativo ainda.';
-
-            const text = `
-📊 *Estatísticas do Grupo — ${periodoTexto}*
-
-📌 *Total de Mensagens:* ${total}
-
-👥 *Membros Mais Ativos:*
-${topText}
-
-💡 Use .myactivity para ver suas estatísticas.
-💡 Use .groupstats total para ver estatísticas de todo o tempo.
-`.trim();
-
-            await sock.sendMessage(from, {
-                text,
-                mentions: sortedUsers.map(u => u[0])
-            }, { quoted: msg });
-
-        } catch (err) {
-            console.error('[groupstats cmd] erro:', err);
-            extra.reply('❌ Erro ao carregar as estatísticas.');
+            console.error('[groupstats cmd] error:', err);
+            extra.reply('❌ Error loading stats.');
         }
     }
 };
