@@ -52,4 +52,34 @@ function getStats(groupId) {
     return db[groupId][today];
 }
 
-module.exports = { addMessage, getStats };
+function getAllTimeStats(groupId) {
+    const db = loadDB();
+
+    if (!db[groupId]) return null;
+
+    const result = {
+        total: 0,
+        users: {},
+        hours: {}
+    };
+
+    for (const dayData of Object.values(db[groupId])) {
+        result.total += dayData.total || 0;
+
+        for (const [user, count] of Object.entries(dayData.users || {})) {
+            result.users[user] = (result.users[user] || 0) + count;
+        }
+
+        for (const [hour, count] of Object.entries(dayData.hours || {})) {
+            result.hours[hour] = (result.hours[hour] || 0) + count;
+        }
+    }
+
+    return result;
+}
+
+module.exports = {
+    addMessage,
+    getStats,
+    getAllTimeStats
+};
