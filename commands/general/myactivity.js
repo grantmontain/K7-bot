@@ -1,6 +1,6 @@
 // commands/general/myactivity.js
 
-const { getStats } = require('../../utils/groupstats');
+const { getAllTimeStats } = require('../../utils/groupstats');
 
 module.exports = {
     name: 'myactivity',
@@ -14,10 +14,10 @@ module.exports = {
         try {
             const from = extra.from;
             const sender = extra.sender;
-            const stats = getStats(from);
+            const stats = getAllTimeStats(from););
 
             if (!stats || !stats.users || !stats.users[sender]) {
-                return extra.reply('📊 You haven\'t sent any messages today yet!');
+                return extra.reply('📊 You haven\'t sent any messages yet!');
             }
 
             const userCount = stats.users[sender];
@@ -31,7 +31,7 @@ module.exports = {
             const rank = sortedUsers.findIndex(([id]) => id === sender) + 1;
 
             const text = `
-📊 *Your Activity Today*
+📊 *Your Activity*
 
 👤 *User:* @${sender.split('@')[0]}
 📝 *Messages Sent:* ${userCount}
