@@ -1,6 +1,6 @@
 // commands/admin/groupstats.js
 
-const { getStats } = require('../../utils/groupstats');
+const { getAllTimeStats } = require('../../utils/groupstats');
 
 module.exports = {
     name: 'groupstats',
@@ -13,7 +13,7 @@ module.exports = {
     async execute(sock, msg, args, extra) {
         try {
             const from = extra.from;
-            const stats = getStats(from);
+            const stats = getAllTimeStats(from);
 
             if (!stats)
                 return extra.reply('📊 No activity recorded today.');
@@ -30,7 +30,7 @@ module.exports = {
                 : 'No active users yet.';
 
             const text = `
-📊 *Group Stats — Today*
+📊 *Group Stats — All Time*
 
 📌 *Total Messages:* ${total}
 
