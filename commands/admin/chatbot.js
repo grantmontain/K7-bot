@@ -117,7 +117,7 @@ function stripBotMention(text, sock) {
   return cleaned;
 }
 
-const MENTION_ONLY_FALLBACK = const MENTION_ONLY_FALLBACK = 'Ei, vai falar alguma coisa ou só ia me marcar mesmo?';
+const MENTION_ONLY_FALLBACK = 'Ei, vai falar alguma coisa ou só ia me marcar mesmo?';
 
 async function getAIResponse(userMessage, userContext) {
   const history = userContext.messages.slice(-5).join(' | ');
