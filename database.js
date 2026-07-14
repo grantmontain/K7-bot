@@ -11,6 +11,7 @@ const GROUPS_DB = path.join(DB_PATH, 'groups.json');
 const USERS_DB = path.join(DB_PATH, 'users.json');
 const WARNINGS_DB = path.join(DB_PATH, 'warnings.json');
 const MODS_DB = path.join(DB_PATH, 'mods.json');
+const SUDO_DB = path.join(DB_PATH, 'sudo.json');
 
 // Initialize database directory
 if (!fs.existsSync(DB_PATH)) {
@@ -28,6 +29,7 @@ initDB(GROUPS_DB, {});
 initDB(USERS_DB, {});
 initDB(WARNINGS_DB, {});
 initDB(MODS_DB, { moderators: [] });
+initDB(SUDO_DB, { sudoUsers: [] });
 
 // Read database
 const readDB = (filePath) => {
@@ -162,6 +164,66 @@ const isModerator = (userId) => {
   return mods.includes(userId);
 };
 
+// Sudo Users System - stores full JIDs (e.g. 602455062940@s.whatsapp.net or xyz@lid)
+const toStoredJid = (input) => {
+  const s = String(input).trim();
+  if (!s) return null;
+  if (s.includes('@')) return s; // Already a JID
+  const digits = s.replace(/\D/g, '');
+  return digits.length >= 10 ? `${digits}@s.whatsapp.net` : null;
+};
+
+const getSudoUsers = () => {
+  const sudo = readDB(SUDO_DB);
+  const raw = sudo.sudoUsers || [];
+  return raw.map((entry) => (entry.includes('@') ? entry : `${entry}@s.whatsapp.net`));
+};
+
+const addSudoUser = (userIdOrJid) => {
+  const sudo = readDB(SUDO_DB);
+  if (!sudo.sudoUsers) sudo.sudoUsers = [];
+  const jid = toStoredJid(userIdOrJid);
+  if (!jid) return false;
+  if (!sudo.sudoUsers.includes(jid)) {
+    sudo.sudoUsers.push(jid);
+    return writeDB(SUDO_DB, sudo);
+  }
+  return false;
+};
+
+const removeSudoUser = (userIdOrJid) => {
+  const sudo = readDB(SUDO_DB);
+  if (!sudo.sudoUsers) return false;
+  const jid = toStoredJid(userIdOrJid);
+  if (!jid) return false;
+  const before = sudo.sudoUsers.length;
+  const jidUser = jid.split('@')[0];
+  sudo.sudoUsers = sudo.sudoUsers.filter((entry) => {
+    const entryJid = entry.includes('@') ? entry : `${entry}@s.whatsapp.net`;
+    const entryUser = entryJid.split('@')[0];
+    return entryJid !== jid && entryUser !== jidUser;
+  });
+  return writeDB(SUDO_DB, sudo) && sudo.sudoUsers.length < before;
+};
+
+const isSudoUser = (sender) => {
+  const sudo = getSudoUsers();
+  if (!sender) return false;
+  const senderStr = String(sender).trim();
+  const senderUser = senderStr.includes('@')
+    ? senderStr.split('@')[0].split(':')[0]
+    : (senderStr.replace(/\D/g, '') || senderStr);
+  if (!senderUser) return false;
+  return sudo.some((jid) => {
+    const storedUser = jid.split('@')[0]?.split(':')[0] || '';
+    if (!storedUser) return false;
+    return (
+      storedUser === senderUser ||
+      (senderUser.length >= 10 && (storedUser.startsWith(senderUser) || senderUser.startsWith(storedUser)))
+    );
+  });
+};
+
 module.exports = {
   getGroupSettings,
   updateGroupSettings,
@@ -174,5 +236,9 @@ module.exports = {
   getModerators,
   addModerator,
   removeModerator,
-  isModerator
+  isModerator,
+  getSudoUsers,
+  addSudoUser,
+  removeSudoUser,
+  isSudoUser
 };

@@ -13,6 +13,11 @@ const fs = require('fs')
 const path = require('path')
 const { spawn } = require('child_process')
 
+let ffmpegPath = 'ffmpeg'
+try {
+  ffmpegPath = require('ffmpeg-static') || 'ffmpeg'
+} catch { /* use system ffmpeg */ }
+
 function ffmpeg(buffer, args = [], ext = '', ext2 = '') {
   return new Promise(async (resolve, reject) => {
     try {
@@ -23,7 +28,7 @@ function ffmpeg(buffer, args = [], ext = '', ext2 = '') {
       let tmp = path.join(tempDir, Date.now() + '.' + ext)
       let out = tmp + '.' + ext2
       await fs.promises.writeFile(tmp, buffer)
-      spawn('ffmpeg', [
+      spawn(ffmpegPath, [
         '-y',
         '-i', tmp,
         ...args,

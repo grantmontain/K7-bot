@@ -6,10 +6,14 @@ const config = require('./config');
 const database = require('./database');
 const { loadCommands } = require('./utils/commandLoader');
 const { addMessage } = require('./utils/groupstats');
+const { tryAutoLevelUp, formatLevelUpMessage } = require('./utils/economy');
 const { jidDecode, jidEncode } = require('@whiskeysockets/baileys');
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
+const chatbotCmd = require('./commands/admin/chatbot');
+const { containsBadWord } = require('./utils/badwords');
+const { writeExifImg } = require('./utils/exif');
 
 // Group metadata cache to prevent rate limiting
 const groupMetadataCache = new Map();
@@ -17,6 +21,22 @@ const CACHE_TTL = 60000; // 1 minute cache
 
 // Load all commands
 const commands = loadCommands();
+
+const ANTIBADWORD_STICKER_PATH = path.join(__dirname, 'utils', 'galimatde.webp');
+const ANTIBADWORD_STICKER_AUTHOR = 'GALI MAT DE BSDK';
+let antibadwordStickerCache = null;
+
+const getAntibadwordSticker = async () => {
+  try {
+    if (!antibadwordStickerCache && fs.existsSync(ANTIBADWORD_STICKER_PATH)) {
+      const raw = fs.readFileSync(ANTIBADWORD_STICKER_PATH);
+      antibadwordStickerCache = await writeExifImg(raw, { packname: ANTIBADWORD_STICKER_AUTHOR });
+    }
+  } catch (e) {
+    console.error('[antibadword] sticker load error:', e.message);
+  }
+  return antibadwordStickerCache;
+};
 
 // Unwrap WhatsApp containers (ephemeral, view once, etc.)
 const getMessageContent = (msg) => {
@@ -266,6 +286,16 @@ const buildComparableIds = (jid) => {
   }
 };
 
+// Check if a JID belongs to the bot (handles PN/LID/device IDs)
+const isBotJid = (jid, sock) => {
+  if (!jid || !sock?.user) return false;
+  const botRefs = [sock.user.id, sock.user.lid].filter(Boolean);
+  const targetVariants = buildComparableIds(jid);
+  return botRefs.some(botRef =>
+    buildComparableIds(botRef).some(botVariant => targetVariants.includes(botVariant))
+  );
+};
+
 // Find participant by either PN JID or LID JID
 const findParticipant = (participants = [], userIds) => {
   const targets = (Array.isArray(userIds) ? userIds : [userIds])
@@ -447,6 +477,26 @@ const handleMessage = async (sock, msg) => {
     
     // Fetch group metadata immediately if it's a group
     const groupMetadata = isGroup ? await getGroupMetadata(sock, from) : null;
+
+    // Anti-group status (block group status posts)
+    if (isGroup && !msg.key.fromMe) {
+      try {
+        const blocked = await handleAntigroupstatus(sock, msg, groupMetadata, content);
+        if (blocked) return;
+      } catch (error) {
+        console.error('Error in antigroupstatus handler:', error);
+      }
+    }
+
+    // Anti-sticker (block stickers from non-admins)
+    if (isGroup && !msg.key.fromMe) {
+      try {
+        const blocked = await handleAntisticker(sock, msg, groupMetadata, content);
+        if (blocked) return;
+      } catch (error) {
+        console.error('Error in antisticker handler:', error);
+      }
+    }
     
     // Anti-group mention protection (check BEFORE prefix check, as these are non-command messages)
     if (isGroup) {
@@ -465,7 +515,31 @@ const handleMessage = async (sock, msg) => {
     
     // Track group message statistics
     if (isGroup) {
-      addMessage(from, sender);
+      const ctx = content?.extendedTextMessage?.contextInfo;
+      addMessage(from, sender, {
+        mentions: ctx?.mentionedJid || [],
+        sticker: !!(content?.stickerMessage || msg.message?.stickerMessage),
+      });
+
+      // Auto level-up when enough XP (economy ranks)
+      if (!msg.key.fromMe) {
+        try {
+          const levelResult = tryAutoLevelUp(from, sender);
+          if (levelResult.leveled) {
+            await sock.sendMessage(from, {
+              text: formatLevelUpMessage(
+                levelResult.before,
+                levelResult.after,
+                levelResult.role,
+                levelResult.diamondsEarned
+              ),
+              mentions: [sender],
+            }, { quoted: msg });
+          }
+        } catch (e) {
+          // ignore autolevel errors
+        }
+      }
     }
     
     // Return early for non-group messages with no recognizable content
@@ -643,6 +717,19 @@ const handleMessage = async (sock, msg) => {
           }
         }
       }
+
+      // Antibadword protection
+      if (groupSettings.antibadword && !msg.key.fromMe) {
+        const messageText = body || content.imageMessage?.caption || content.videoMessage?.caption || '';
+        if (messageText) {
+          try {
+            const blocked = await handleAntibadword(sock, msg, groupMetadata, messageText, sender);
+            if (blocked) return;
+          } catch (e) {
+            console.error('Error in antibadword handler:', e);
+          }
+        }
+      }
     }
     
     // Anti-group mention protection (check BEFORE prefix check, as these are non-command messages)
@@ -754,8 +841,68 @@ const handleMessage = async (sock, msg) => {
     } catch (e) {
       // Silently ignore if tictactoe command doesn't exist or has errors
     }
-    
-    
+
+    try {
+      const { handleGameInput } = require('./utils/funGames');
+      const handled = await handleGameInput(sock, msg, {
+        from,
+        sender,
+        isGroup,
+        groupMetadata,
+        isOwner: isOwner(sender),
+        reply: (text) => sock.sendMessage(from, { text }, { quoted: msg }),
+      });
+      if (handled) return;
+    } catch (e) {
+      // ignore fun game handler errors
+    }
+
+    // AFK — one-time reply when owner is away (groups + DMs)
+    if (!msg.key.fromMe) {
+      const afk = require('./utils/afk');
+      if (afk.isEnabled() && !isOwner(sender)) {
+        let shouldHandleAfk = false;
+
+        if (!isGroup) {
+          // DM: any message from non-owner triggers AFK once
+          shouldHandleAfk = true;
+        } else {
+          const ctx = content.extendedTextMessage?.contextInfo
+            || content.imageMessage?.contextInfo
+            || content.videoMessage?.contextInfo
+            || content.stickerMessage?.contextInfo;
+          const mentionedJids = ctx?.mentionedJid || [];
+          const isMentioned = mentionedJids.some(jid => isBotJid(jid, sock));
+          const isReplyToBot = ctx?.participant && isBotJid(ctx.participant, sock);
+          shouldHandleAfk = (isMentioned || isReplyToBot) && !body.startsWith(config.prefix);
+        }
+
+        if (shouldHandleAfk) {
+          if (afk.shouldNotify(from, sender)) {
+            afk.markNotified(from, sender);
+            await sock.sendMessage(from, { text: afk.getMessage() }, { quoted: msg });
+          }
+          return;
+        }
+      }
+    }
+
+    // Chatbot — respond when bot is @mentioned or user replies to bot
+    if (!msg.key.fromMe && isGroup) {
+      const groupSettings = database.getGroupSettings(from);
+      if (groupSettings.chatbot) {
+        const ctx = content.extendedTextMessage?.contextInfo;
+        const mentionedJids = ctx?.mentionedJid || [];
+        const isMentioned = mentionedJids.some(jid => isBotJid(jid, sock));
+        const isReplyToBot = ctx?.participant && isBotJid(ctx.participant, sock);
+
+        if ((isMentioned || isReplyToBot) && !body.startsWith(config.prefix)) {
+          await chatbotCmd.handleChat(sock, msg, body, sender);
+          return;
+        }
+      }
+    }
+
     // Check if message starts with prefix
     if (!body.startsWith(config.prefix)) return;
     
@@ -1157,6 +1304,178 @@ const handleGroupUpdate = async (sock, update) => {
   }
 };
 
+// Detect WhatsApp group status posts (groupStatusMessage / groupStatusMessageV2)
+const isGroupStatusPost = (msg, content) => {
+  const unwrapped = content || getMessageContent(msg);
+  return !!(
+    unwrapped?.groupStatusMessage ||
+    unwrapped?.groupStatusMessageV2 ||
+    msg.message?.groupStatusMessage ||
+    msg.message?.groupStatusMessageV2
+  );
+};
+
+// Anti-group status handler
+const handleAntigroupstatus = async (sock, msg, groupMetadata, content) => {
+  try {
+    const from = msg.key.remoteJid;
+    const sender = msg.key.participant || msg.key.remoteJid;
+
+    const groupSettings = database.getGroupSettings(from);
+    if (!groupSettings.antigroupstatus) return false;
+    if (!isGroupStatusPost(msg, content)) return false;
+
+    // TESTING: admins/owners not exempt — remove this block later
+    // const senderIsAdmin = await isAdmin(sock, sender, from, groupMetadata);
+    // const senderIsOwner = isOwner(sender);
+    // if (senderIsAdmin || senderIsOwner) return false;
+
+    const botIsAdmin = await isBotAdmin(sock, from, groupMetadata);
+    const action = (groupSettings.antigroupstatusAction || 'delete').toLowerCase();
+
+    try {
+      await sock.sendMessage(from, { delete: msg.key });
+    } catch (e) {
+      console.error('Failed to delete group status post:', e);
+    }
+
+    if (action === 'kick' && botIsAdmin) {
+      try {
+        await sock.groupParticipantsUpdate(from, [sender], 'remove');
+        await sock.sendMessage(from, {
+          text: '📵 *Anti Group Status!* @user was kicked for posting a group status.',
+          mentions: [sender]
+        }, { quoted: msg });
+      } catch (e) {
+        console.error('Failed to kick for antigroupstatus:', e);
+      }
+    } else {
+      try {
+        await sock.sendMessage(from, {
+          text: '📵 *Anti Group Status!* Group status removed.',
+          mentions: [sender]
+        }, { quoted: msg });
+      } catch (e) {
+        console.error('Failed to notify antigroupstatus:', e);
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in antigroupstatus handler:', error);
+    return false;
+  }
+};
+
+// Antibadword handler
+const handleAntibadword = async (sock, msg, groupMetadata, userMessage, sender) => {
+  try {
+    const from = msg.key.remoteJid;
+    const groupSettings = database.getGroupSettings(from);
+    if (!groupSettings.antibadword) return false;
+    if (!containsBadWord(userMessage)) return false;
+
+    const senderIsAdmin = await isAdmin(sock, sender, from, groupMetadata);
+    const senderIsOwner = isOwner(sender);
+    if (senderIsAdmin || senderIsOwner) return false;
+
+    const botIsAdmin = await isBotAdmin(sock, from, groupMetadata);
+    if (!botIsAdmin) return false;
+
+    try {
+      await sock.sendMessage(from, { delete: msg.key });
+    } catch (e) {
+      console.error('Failed to delete badword message:', e);
+      return false;
+    }
+
+    const action = (groupSettings.antibadwordAction || 'delete').toLowerCase();
+    const maxWarnings = config.maxWarnings || 3;
+
+    if (action === 'kick') {
+      try {
+        await sock.groupParticipantsUpdate(from, [sender], 'remove');
+        await sock.sendMessage(from, {
+          text: '🚫 *Antibadword!* @user was kicked for using bad words.',
+          mentions: [sender],
+        }, { quoted: msg });
+      } catch (e) {
+        console.error('Failed to kick for antibadword:', e);
+      }
+    } else if (action === 'warn') {
+      const result = database.addWarning(from, sender, 'Bad words');
+      if (result.count >= maxWarnings) {
+        try {
+          await sock.groupParticipantsUpdate(from, [sender], 'remove');
+          database.clearWarnings(from, sender);
+          await sock.sendMessage(from, {
+            text: `🚫 *Antibadword!* @user was kicked after ${maxWarnings} warnings.`,
+            mentions: [sender],
+          }, { quoted: msg });
+        } catch (e) {
+          console.error('Failed to kick after antibadword warnings:', e);
+        }
+      } else {
+        await sock.sendMessage(from, {
+          text: `⚠️ *Antibadword!* @user warning ${result.count}/${maxWarnings} for bad words.`,
+          mentions: [sender],
+        }, { quoted: msg });
+      }
+    } else {
+      const sticker = await getAntibadwordSticker();
+      if (sticker) {
+        await sock.sendMessage(from, { sticker }, { quoted: msg });
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in antibadword handler:', error);
+    return false;
+  }
+};
+
+// Antisticker handler
+const handleAntisticker = async (sock, msg, groupMetadata, content) => {
+  try {
+    const from = msg.key.remoteJid;
+    const sender = msg.key.participant || msg.key.remoteJid;
+
+    const groupSettings = database.getGroupSettings(from);
+    if (!groupSettings.antisticker) return false;
+
+    const unwrapped = content || getMessageContent(msg);
+    const isSticker = !!(unwrapped?.stickerMessage || msg.message?.stickerMessage);
+    if (!isSticker) return false;
+
+    const senderIsAdmin = await isAdmin(sock, sender, from, groupMetadata);
+    const senderIsOwner = isOwner(sender);
+    if (senderIsAdmin || senderIsOwner) return false;
+
+    const botIsAdmin = await isBotAdmin(sock, from, groupMetadata);
+    const action = (groupSettings.antistickerAction || 'delete').toLowerCase();
+
+    try {
+      await sock.sendMessage(from, { delete: msg.key });
+    } catch (e) {
+      console.error('Failed to delete sticker for antisticker:', e);
+    }
+
+    if (action === 'kick' && botIsAdmin) {
+      try {
+        await sock.groupParticipantsUpdate(from, [sender], 'remove');
+      } catch (e) {
+        console.error('Failed to kick for antisticker:', e);
+      }
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error in antisticker handler:', error);
+    return false;
+  }
+};
+
 // Antilink handler
 const handleAntilink = async (sock, msg, groupMetadata) => {
   try {
@@ -1397,6 +1716,9 @@ module.exports = {
   handleMessage,
   handleGroupUpdate,
   handleAntilink,
+  handleAntibadword,
+  handleAntisticker,
+  handleAntigroupstatus,
   handleAntigroupmention,
   initializeAntiCall,
   isOwner,

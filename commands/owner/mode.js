@@ -28,7 +28,7 @@ module.exports = {
           `Current Mode: *${currentMode.toUpperCase()}*\n` +
           `Status: ${description}\n\n` +
           `Usage:\n` +
-          `  .mode private - Only owner can use\n` +
+          `  .mode private - Only owner and sudo can use\n` +
           `  .mode public - Everyone can use`
         );
       }
@@ -37,13 +37,13 @@ module.exports = {
       
       if (mode === 'private' || mode === 'priv') {
         if (config.selfMode) {
-          return extra.reply('🔒 Bot is already in *PRIVATE* mode.\nOnly owner can use commands.');
+          return extra.reply('🔒 Bot is already in *PRIVATE* mode.\nOnly owner and sudo can use commands.');
         }
         
         // Update config
         updateConfig('selfMode', true);
         config.selfMode = true; // Update runtime config
-        return extra.reply('🔒 Bot mode changed to *PRIVATE*\n\nOnly owner can use commands now.');
+        return extra.reply('🔒 Bot mode changed to *PRIVATE*\n\nOnly owner and sudo can use commands now.');
       }
       
       if (mode === 'public' || mode === 'pub') {

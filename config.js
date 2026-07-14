@@ -4,19 +4,19 @@
 
 module.exports = {
     // Bot Owner Configuration
-    ownerNumber: ['91xxxxxxxxxxx'], // Add your number without + or spaces (e.g., 919876543210)
-    ownerName: ['Montanha', 'Professor'], // Owner names corresponding to ownerNumber array
+    ownerNumber: ['9876543210'], // Add your number without + or spaces (e.g., 919876543210)
+    ownerName: ['Knight Bot'], // Owner names corresponding to ownerNumber array
     
     // Bot Configuration
-    botName: 'K7',
-    prefix: '.',
+    botName: 'Knight Bot Mini',
+    prefix: ',',
     sessionName: 'session',
     sessionID: process.env.SESSION_ID || '',
     newsletterJid: '120363161513685998@newsletter', // Newsletter JID for menu forwarding
-    updateZipUrl: 'https://github.com/grantmontain/K7-bot/archive/refs/heads/main.zip', // URL to latest code zip for .update command
+    updateZipUrl: 'https://github.com/mruniquehacker/KnightBot-Mini/archive/refs/heads/main.zip', // URL to latest code zip for .update command
     
     // Sticker Configuration
-    packname: 'K7',
+    packname: 'Knight Bot',
     
     // Bot Behavior
     selfMode: false, // Private mode - only owner can use commands
@@ -25,7 +25,7 @@ module.exports = {
     autoBio: false,
     autoSticker: false,
     autoReact: false,
-    autoReactMode: 'bot', // set bot or all via cmd
+    autoReactMode: 'bot',
     autoDownload: false,
     
     // Group Settings Defaults
@@ -37,13 +37,20 @@ module.exports = {
       antiall: false, // Owner only - blocks all messages from non-admins
       antiviewonce: false,
       antibot: false,
+      antibotAction: 'warn', // 'warn' | 'kick'
       anticall: false, // Anti-call feature
       antigroupmention: false, // Anti-group mention feature
       antigroupmentionAction: 'delete', // 'delete', 'kick'
+      antigroupstatus: false, // Block group status posts
+      antigroupstatusAction: 'delete', // 'delete', 'kick'
+      antisticker: false, // Stickers not allowed in group
+      antistickerAction: 'delete', // 'delete', 'kick'
+      antibadword: false, // Block bad words in group
+      antibadwordAction: 'delete', // 'delete', 'kick', 'warn'
       welcome: false,
-      welcomeMessage: '╭╼━≪•NOVO MEMBRO•≫━╾╮\n┃BEM VINDO: @user 👋\n┃Contagem de menbros: #memberCount\n┃Hora: time⏰\n╰━━━━━━━━━━━━━━━╯\n\n*@user* Bem-vindo ao *@group*! 🎉\n*Group 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝚃𝙸𝙾𝙽*\ngroupDesc\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ botName*',
+      welcomeMessage: '╭╼━≪•𝙽𝙴𝚆 𝙼𝙴𝙼𝙱𝙴𝚁•≫━╾╮\n┃𝚆𝙴𝙻𝙲𝙾𝙼𝙴: @user 👋\n┃Member count: #memberCount\n┃𝚃𝙸𝙼𝙴: time⏰\n╰━━━━━━━━━━━━━━━╯\n\n*@user* Welcome to *@group*! 🎉\n*Group 𝙳𝙴𝚂𝙲𝚁𝙸𝙿𝚃𝙸𝙾𝙽*\ngroupDesc\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ botName*',
       goodbye: false,
-      goodbyeMessage: 'Adeus @user 👋 Nunca vamos nos esquecer de você!',
+      goodbyeMessage: 'Goodbye @user 👋 We will never miss you!',
       antiSpam: false,
       antidelete: false,
       nsfw: false,
@@ -62,19 +69,19 @@ module.exports = {
     
     // Message Configuration
     messages: {
-      wait: '⏳ Espere um pouco',
-      success: '✅ Sucesso!',
-      error: '❌ Ocorreu um erro!',
-      ownerOnly: '👑 Esse comando é apenas para o dono do bot!',
-      adminOnly: '🛡️ Esse comando é apenas para os admins do grupo!',
-      groupOnly: '👥 Esse comando é apenas para grupos!',
-      privateOnly: '💬 Esse comando é apenas para o privado!',
-      botAdminNeeded: '🤖 Bot precisa ser adm para executar esse comando!',
-      invalidCommand: '❓ Comando invalido! digite .menu para ver os comandos'
+      wait: '⏳ Please wait...',
+      success: '✅ Success!',
+      error: '❌ Error occurred!',
+      ownerOnly: '👑 This command is only for bot owner!',
+      adminOnly: '🛡️ This command is only for group admins!',
+      groupOnly: '👥 This command can only be used in groups!',
+      privateOnly: '💬 This command can only be used in private chat!',
+      botAdminNeeded: '🤖 Bot needs to be admin to execute this command!',
+      invalidCommand: '❓ Invalid command! Type .menu for help'
     },
     
     // Timezone
-    timezone: 'America/Sao_Paulo',
+    timezone: 'Asia/Kolkata',
     
     // Limits
     maxWarnings: 3,

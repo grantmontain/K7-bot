@@ -1,6 +1,6 @@
 /**
  * GPT Image Command
- * Edit image using GPT Vision with prompt
+ * Edit image using AI Image Editor (MagicEraser) - image_url + prompt API
  */
 
 const axios = require('axios');
@@ -9,11 +9,28 @@ const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 const { webp2png } = require('../../utils/webp2mp4');
 const sharp = require('sharp');
 
+const EDITIMG_API = 'https://restapis.xrizaldev.my.id/api/ai2/editimg';
+const UGUU_UPLOAD = 'https://uguu.se/upload';
+
+/** Upload buffer to uguu.se and return public URL */
+async function uploadToUguu(buffer, filename = 'image.jpg') {
+  const form = new FormData();
+  form.append('files[]', buffer, { filename, contentType: 'image/jpeg' });
+  const { data } = await axios.post(UGUU_UPLOAD, form, {
+    headers: form.getHeaders(),
+    timeout: 30000,
+    maxBodyLength: 20 * 1024 * 1024,
+  });
+  const url = data?.files?.[0]?.url || data?.data?.files?.[0]?.url || data?.[0]?.url;
+  if (!url) throw new Error('No URL in uguu response');
+  return url;
+}
+
 module.exports = {
   name: 'gptimage',
   aliases: ['gptimg', 'editimage', 'aiimage', 'vision','gi'],
   category: 'ai',
-  description: 'Edit image using GPT Vision with prompt',
+  description: 'Edit image using AI Image Editor (MagicEraser) with a prompt',
   usage: '.gptimage <prompt> (reply to image/sticker)',
   
   async execute(sock, msg, args, extra) {
@@ -106,51 +123,56 @@ module.exports = {
         finalImageBuffer = imageBuffer;
       }
       
-      // Prepare form data
-      const form = new FormData();
-      form.append('image', finalImageBuffer, {
-        filename: 'image.jpg',
-        contentType: 'image/jpeg'
-      });
-      form.append('param', prompt);
-      
-      // Send POST request to API
-      const apiUrl = 'https://api.nexray.web.id/ai/gptimage';
-      
-      const response = await axios.post(apiUrl, form, {
-        headers: {
-          ...form.getHeaders(),
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        },
-        responseType: 'arraybuffer',
-        timeout: 120000, // 2 minutes timeout for AI processing
-        maxContentLength: 10 * 1024 * 1024, // 10MB max
-      });
-      
-      if (!response.data) {
-        return await extra.reply('❌ No image received from API. Please try again.');
+      // Upload image to get a public URL (API requires image_url)
+      let imageUrl;
+      try {
+        imageUrl = await uploadToUguu(finalImageBuffer, 'image.jpg');
+      } catch (uploadErr) {
+        console.error('Uguu upload error:', uploadErr);
+        return await extra.reply('❌ Failed to upload image. Please try again.');
       }
-      
-      const resultImageBuffer = Buffer.from(response.data);
-      
-      // Validate buffer
+
+      // Call AI Image Editor API (GET with image_url + prompt)
+      const apiUrl = `${EDITIMG_API}?image_url=${encodeURIComponent(imageUrl)}&prompt=${encodeURIComponent(prompt)}`;
+
+      const response = await axios.get(apiUrl, {
+        timeout: 120000,
+        maxContentLength: 10 * 1024 * 1024,
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      });
+
+      const result = response.data?.result || response.data;
+      if (response.data?.status === false) {
+        return await extra.reply('❌ API returned an error. Please try another image or prompt.');
+      }
+      const outputImageUrl = result?.output_image;
+
+      if (!outputImageUrl) {
+        return await extra.reply('❌ No image URL in API response. Please try again.');
+      }
+
+      // Download the result image
+      const imageResponse = await axios.get(outputImageUrl, {
+        responseType: 'arraybuffer',
+        timeout: 60000,
+      });
+
+      const resultImageBuffer = Buffer.from(imageResponse.data);
+
       if (!resultImageBuffer || resultImageBuffer.length === 0) {
         return await extra.reply('❌ Empty image received from API. Please try again.');
       }
-      
-      // Check file size (WhatsApp image limit is 5MB)
+
       const maxImageSize = 5 * 1024 * 1024; // 5MB
       if (resultImageBuffer.length > maxImageSize) {
         return await extra.reply(
-          `❌ Image too large: ${(resultImageBuffer.length / 1024 / 1024).toFixed(2)}MB (max 5MB)\n` +
-          'The API returned an image that exceeds WhatsApp limits.'
+          `❌ Image too large: ${(resultImageBuffer.length / 1024 / 1024).toFixed(2)}MB (max 5MB)`
         );
       }
-      
-      // Send the modified image
+
       await sock.sendMessage(extra.from, {
         image: resultImageBuffer,
-        caption: `✨ *GPT Vision Result*\n\n📝 Prompt: ${prompt}`
+        caption: `✨ *AI Image Editor (MagicEraser)*\n\n📝 Prompt: ${prompt}`,
       }, { quoted: msg });
       
     } catch (error) {

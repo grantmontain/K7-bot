@@ -325,7 +325,7 @@ const APIs = {
     throw new Error('EliteProTech ytdown returned no download');
   },
   
-    getEliteProTechVideoByUrl: async (youtubeUrl) => {
+  getEliteProTechVideoByUrl: async (youtubeUrl) => {
     const AXIOS_DEFAULTS = {
       timeout: 60000,
       headers: {

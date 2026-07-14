@@ -112,6 +112,22 @@ module.exports = {
         });
         menuText += `\n`;
       }
+
+      // Economy Commands
+      if (categories.economy) {
+        const economyCmds = categories.economy.filter(
+          (cmd) => !cmd.ownerOnly || extra.isOwner
+        );
+        if (economyCmds.length) {
+          menuText += `┏━━━━━━━━━━━━━━━━━\n`;
+          menuText += `┃ 💰 ECONOMY COMMAND\n`;
+          menuText += `┗━━━━━━━━━━━━━━━━━\n`;
+          economyCmds.forEach(cmd => {
+            menuText += `│ ➜ ${config.prefix}${cmd.name}\n`;
+          });
+          menuText += `\n`;
+        }
+      }
       
       // Utility Commands
       if (categories.utility) {
