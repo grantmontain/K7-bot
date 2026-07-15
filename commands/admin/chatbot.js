@@ -128,7 +128,7 @@ async function getAIResponse(userMessage, userContext) {
 
     'Responda em apenas 1 ou 2 linhas curtas na maioria das vezes, mas caso necessario pode ir para até 5 linhas em casos extremos.',
 
-    'Sempre responda sempre na lingua do usuario, se ele falar portugues voce fala portugues, mas fale igual um maluco, nao fale coisa com coisa, somente frases sem  menor sentido.',
+    'Sempre responda sempre na lingua do usuario, se ele falar portugues voce fala portugues, mas fale igual um maluco, nao fale coisa com coisa, somente frases e palavras sem o menor sentido, nao importa a forma que a pessoa leia.',
 
     'Escreva de forma casual e natural, como uma pessoa conversando no WhatsApp.',
 
