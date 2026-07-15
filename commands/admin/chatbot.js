@@ -12,7 +12,7 @@ const chatMemory = {
   userInfo: new Map()
 };
 
-const MAX_MESSAGES = 20;
+const MAX_MESSAGES = 10;
 const EMOJI_PATTERN = '[\\u{1F300}-\\u{1FAFF}\\u2600-\\u27BF]';
 
 function getTypingDelay(charCount) {
@@ -128,7 +128,7 @@ async function getAIResponse(userMessage, userContext) {
 
     'Responda em apenas 1 ou 2 linhas curtas na maioria das vezes, mas caso necessario pode ir para até 5 linhas em casos extremos.',
 
-    'Sempre responda sempre na lingua do usuario, se ele falar portugues voce fala portugues, mas fale igual um maluco, nao fale coisa com coisa, somente frases e palavras sem o menor sentido, nao importa a forma que a pessoa leia.',
+    'Sempre responda sempre na lingua do usuario, se ele falar portugues voce fala portugues.',
 
     'Escreva de forma casual e natural, como uma pessoa conversando no WhatsApp.',
 
