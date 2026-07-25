@@ -505,8 +505,8 @@ const aiCommands = [
         const name = getUserName(targetId, extra, msg);
         const topic = args.join(' ').trim();
         const prompt = topic
-          ? `Roast ${name} about "${topic}" in 2-3 funny savage lines. Use their name naturally. Keep it playful. Max 200 words.`
-          : `Roast ${name} in 2-3 funny savage lines. Use their name naturally. Keep it playful. Max 200 words.`;
+          ? `Roast ${name} about "${topic}" in 2-3 funny savage lines. Use their name naturally. Keep it playful. Max 200 words, speak in brazilian portuguese.`
+          : `Roast ${name} in 2-3 funny savage lines. Use their name naturally. Keep it playful. Max 200 words, speak in brazilian portuguese.`;
         const roast = await askFunAi(prompt);
         await sock.sendMessage(extra.from, {
           text: `${targetTag}\n\n${roast}`,
