@@ -102,7 +102,8 @@ function stripBotMention(text, sock) {
     cleaned = cleaned.replace(new RegExp(`@${escapeRegex(botName)}`, 'gi'), '');
   }
 
-  const botUser = sock?.user?.id?.split(':')[0]?.split('@')[0];
+  const botUs
+  = sock?.user?.id?.split(':')[0]?.split('@')[0];
   if (botUser) {
     cleaned = cleaned.replace(new RegExp(`@\\+?${escapeRegex(botUser)}`, 'g'), '');
   }
