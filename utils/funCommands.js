@@ -291,31 +291,31 @@ const randomCommands = [
     },
   },
   {
-    name: 'choose',
-    aliases: ['decide', 'select'],
+    name: 'escolha',
+    aliases: ['decida', 'selecione'],
     category: 'fun',
-    description: 'Pick from options',
-    usage: '.choose pizza burger biryani',
+    description: 'Escolhe entre as opções',
+    usage: '.escolha pizza burguer pastel',
     async execute(sock, msg, args, extra) {
       try {
-        if (args.length < 2) return extra.reply('Usage: `.choose option1 option2 ...`');
-        await extra.reply(`🎯 I choose: *${pick(args)}*`);
+        if (args.length < 2) return extra.reply('Usage: `.escolha option1 option2 ...`');
+        await extra.reply(`🎯 Eu escolho: *${pick(args)}*`);
       } catch (e) {
-        await extra.reply('❌ Something went wrong.');
+        await extra.reply('❌ Algo deu errado');
       }
     },
   },
   {
-    name: 'coinflip',
-    aliases: ['flip', 'coin'],
+    name: 'giremoeda',
+    aliases: ['flip', 'moeda'],
     category: 'fun',
-    description: 'Flip a coin',
-    usage: '.coinflip',
+    description: 'gire uma moeda',
+    usage: '.giremoeda',
     async execute(sock, msg, args, extra) {
       try {
-        await extra.reply(pick(['🪙 *Heads!*', '🪙 *Tails!*']));
+        await extra.reply(pick(['🪙 *Cara!*', '🪙 *Coroa!*']));
       } catch (e) {
-        await extra.reply('❌ Something went wrong.');
+        await extra.reply('❌ Algo deu errado.');
       }
     },
   },
