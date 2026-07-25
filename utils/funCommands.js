@@ -62,13 +62,13 @@ const LOCAL_QUOTES = [
 ];
 
 const rateCommands = [
-  createRateCommand('iqrate', ['iq'], {
-    description: 'Rate someone\'s IQ',
-    usage: '.iqrate @user',
+  createRateCommand('qirate', ['qi'], {
+    description: 'Ranqueia o QI de alguem',
+    usage: '.qirate @user',
     salt: 1,
     lines: (p, t) => [
-      `${t} IQ: *${p}* 🧠${p < 30 ? ' — room temperature IQ' : p > 80 ? ' — big brain energy' : ' — average legend'}`,
-      `Brain cells detected in ${t}: *${p}%*`,
+      `${t} QI: *${p}* 🧠${p < 30 ? ' — QI da temperatura da sala' : p > 80 ? ' — cabeçudo' : ' — O Sabo Muito'}`,
+      `Celulas cerebrais detectadas em ${t}: *${p}%*`,
     ],
   }),
   createRateCommand('rizzrate', ['rizz'], {
