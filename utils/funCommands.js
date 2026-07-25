@@ -155,9 +155,9 @@ const pairCommands = [
   }),
   {
     name: 'vs',
-    aliases: ['compare', 'battle'],
+    aliases: ['compare', 'batalha'],
     category: 'fun',
-    description: 'Compare two users',
+    description: 'Comparaa dois usuarios',
     usage: '.vs @user1 @user2',
     groupOnly: true,
     async execute(sock, msg, args, extra) {
@@ -165,7 +165,7 @@ const pairCommands = [
         const pair = getTwoUsers(msg, extra, sock);
         if (pair.error) return extra.reply(pair.error);
         const { a, b } = pair;
-        const stats = ['IQ', 'Rizz', 'Chaos', 'Luck'];
+        const stats = ['QI', 'Carisma', 'Caos', 'Sorte'];
         const lines = stats.map((s) => {
           const pa = percentFromId(a, s.length);
           const pb = percentFromId(b, s.length + 3);
