@@ -4,7 +4,7 @@
 
 const axios = require('axios');
 
-const MAX_CHARS = 300;
+const MAX_CHARS = 200;
 const LANGS = new Set(['en', 'hi', 'id', 'es', 'fr', 'de', 'pt', 'ar', 'ja', 'ko']);
 
 function detectLang(text) {
