@@ -213,10 +213,10 @@ const randomCommands = [
     usage: '.8ball <question>',
     build: (args) => {
       if (!args.length) return null;
-      const answers = ['Yes ✅', 'No ❌', 'Maybe 🤔', 'Ask again later', 'Definitely 😎', 'Absolutely not 💀', 'Signs point to yes'];
+      const answers = ['Sim ✅', 'Não ❌', 'Talvez 🤔', 'Pergunte de novo depois', 'Definitivamente 😎', 'Absolutamente não 💀', 'Sinais apontam que sim'];
       return `🎱 *${args.join(' ')}*\n\n→ ${pick(answers)}`;
     },
-    empty: '❌ Ask a question! `.8ball will it rain?`',
+    empty: '❌ Faça uma pergunta! `.8ball vai chover?`',
   }),
   createRandomCommand('fortune', ['cookie'], {
     description: 'Fortune cookie',
