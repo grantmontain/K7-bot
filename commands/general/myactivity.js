@@ -14,8 +14,7 @@ module.exports = {
         try {
             const from = extra.from;
             const sender = extra.sender;
-            const stats = getAllTimeStats(from););
-
+            const stats = getAllTimeStats(from);
             if (!stats || !stats.users || !stats.users[sender]) {
                 return extra.reply('📊 You haven\'t sent any messages yet!');
             }
