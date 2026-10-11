@@ -60,7 +60,10 @@ Edite `config.js`:
 ```bash
 node index.js
 ```
-
+### Iniciar pelo pm2
+``bash
+pm2 start index.js --name "K7-bot"
+``
 Quando o bot iniciar:
 
 * Se `sessionID` estiver vazio, um **QR code** aparecerá no terminal – escaneie usando **Dispositivos Conectados** no WhatsApp.
