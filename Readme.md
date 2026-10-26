@@ -1,202 +1,232 @@
-<div align="center">
+ <div align="center">
 
-## Knight Bot Mini
+## K7
 
-[![Made with Baileys](https://img.shields.io/badge/Made%20with-Baileys-00bcd4?style=for-the-badge)](https://github.com/WhiskeySockets/Baileys)
+[![Feito com Baileys](https://img.shields.io/badge/Feito%20com-Baileys-00bcd4?style=for-the-badge)](https://github.com/WhiskeySockets/Baileys)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
+[![Licença: MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-<img src="utils/bot_image.jpg" alt="Knight Bot" width="260">
+<img src="utils/bot_image.jpg" alt="K7 Bot" width="260">
 
 </div>
 
-Knight Bot Mini is a WhatsApp MD bot built on top of the **Baileys** library.  
-It’s designed to be fast, lightweight, and easy to customize without touching the core code.  
-This project is **fully open source** — you can modify it, rebrand it, and make your **own bot** from this codebase **free of cost**, without needing any permission from our side.  
-All commands and the overall structure are written in a way that makes customization (bot image, prefix, name, features, etc.) as easy as possible.
+O **K7** é um bot de WhatsApp MD desenvolvido com a biblioteca **Baileys** e um fork do projeto **Knightbot**.
+
+O projeto foi desenvolvido para ser rápido, leve e fácil de personalizar, sem a necessidade de modificar o código principal.
+
+Este projeto é **totalmente de código aberto**. Você pode modificá-lo, alterar sua identidade visual e criar seu próprio bot gratuitamente, sem precisar de autorização dos desenvolvedores originais.
+
+Os comandos e a estrutura do projeto foram organizados para facilitar a personalização da imagem, do prefixo, do nome, dos recursos e de outras funcionalidades.
 
 ---
 
+## ✨ Funcionalidades
 
-## ✨ Features
-
-- **Fully Open Source** – entire codebase is editable; host it anywhere (Heroku, panel, VPS, etc.).  
-- **Easy Customization via Commands** – change **bot image**, **prefix**, **channel/newsletter**, **bot name**, etc. with simple commands.  
-- **Modular Command System** – commands are organized in the `commands` folder for easy editing.  
-- **Optimized for Stability** – RAM‑optimized media handling (streaming, temp cleanup), better session handling via `sessionID` in `config.js`.  
-- **Owner Utilities** – restart, update from ZIP, and more owner‑only tools.
+- **Totalmente de código aberto:** todo o código pode ser editado, e o bot pode ser hospedado em diferentes ambientes, como Heroku, painéis de hospedagem e servidores VPS.
+- **Personalização por comandos:** altere a imagem do bot, o prefixo, o canal de notícias, o nome e outras configurações usando comandos simples.
+- **Sistema modular de comandos:** os comandos ficam organizados na pasta `commands`, facilitando a edição e a criação de novas funcionalidades.
+- **Otimizado para estabilidade:** gerenciamento de memória RAM, processamento de mídias por streaming, limpeza de arquivos temporários e gerenciamento de sessões por meio do `sessionID` em `config.js`.
+- **Ferramentas exclusivas do proprietário:** reinicialização do bot, atualização por arquivo ZIP e outras funcionalidades administrativas.
 
 ---
 
-### 1. Fork the Repository
+## Faça um fork do repositório original
 
 <div align="center">
 
 <a href="https://github.com/mruniquehacker/Knightbot-MD/fork" target="_blank">
-  <img src="https://img.shields.io/badge/Fork%20Repository-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Fork on GitHub">
+  <img src="https://img.shields.io/badge/Fazer%20Fork-GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="Fazer fork no GitHub">
 </a>
 
 </div>
 
-> This creates your own copy of `Knightbot-MD` under your GitHub account.
+Isso criará uma cópia própria do repositório `Knightbot-MD` na sua conta do GitHub, permitindo que você modifique o projeto e mantenha suas próprias alterações.
 
 ---
 
-### 2. Get Pair Code
+## 🛠 Instalação local
 
-Deploy a small helper to generate a **pair code** and obtain your session string.
+### 1. Clone o repositório
 
-<div align="center">
-
-<a href="https://knight-bot-paircode.onrender.com/" target="_blank">
-  <img src="https://img.shields.io/badge/Generate-Pair%20Code-blueviolet?style=for-the-badge" alt="Generate Pair Code">
-</a>
-
-</div>
-
-After scanning, you will receive a **session string** starting with:
-
-```text
-KnightBot!H4....
-```
-
-Copy that full string and paste it into `config.js`:
-
-```js
-sessionID: 'KnightBot!H4.....'
-```
-
-Or set it via the `SESSION_ID` environment variable when hosting.
-
----
-
-### 3. Deploy on Panel (Katabump, etc.)
-
-<div align="center">
-
-<a href="https://dashboard.katabump.com/auth/login#d6b7d6" target="_blank">
-  <img src="https://img.shields.io/badge/Deploy%20on-Katabump-orange?style=for-the-badge" alt="Deploy on Katabump">
-</a>
-
-</div>
-
-For a full step‑by‑step deployment tutorial (panels / VPS / Heroku), add or update your YouTube guide here:
-
-- **YouTube Tutorial:** *(coming soon)*
-
----
-
-## 🛠 Local Setup
-
-### 1️⃣ Clone the repository
+Execute os comandos abaixo no terminal:
 
 ```bash
-git clone https://github.com/mruniquehacker/Knightbot-MD.git
-cd Knightbot-MD
+git clone https://github.com/grantmontain/K7-bot.git
+cd K7-bot
 ```
 
-### 2️⃣ Install dependencies
+### 2. Instale as dependências
 
 ```bash
 npm install
 ```
 
-### 3️⃣ Configure session
 
-Edit `config.js`:
+### 3. Inicie o bot pela primeira vez
 
-- **Option A: Use session string**
-
-  ```js
-  sessionID: 'KnightBot!H4.....'
-  ```
-
-- **Option B: Scan QR**
-
-  ```js
-  sessionID: ''
-  ```
-
-  Run the bot and scan the QR from the terminal.
-
-### 4️⃣ Run the bot
+Execute:
 
 ```bash
 node index.js
 ```
 
-When the bot starts:
+Quando o bot iniciar:
 
-- If `sessionID` is empty, a **QR code** will appear in the terminal – scan it using **Linked Devices** in WhatsApp.  
-- If `sessionID` is set, it will log in using that session string.
+- Se `sessionID` estiver vazio, um QR Code aparecerá no terminal. Escaneie-o usando a opção **Aparelhos conectados** do WhatsApp.
+
+Aguarde a conclusão da autenticação e confirme que o bot está funcionando corretamente.
+
+**Mantenha esse terminal aberto durante a primeira execução.** Depois de concluir a configuração inicial, interrompa o processo com `Ctrl + C` antes de continuar.
+
+### 4. Instale o PM2
+
+O PM2 é um gerenciador de processos para aplicações Node.js. Ele permite manter o bot em execução em segundo plano, consultar seus logs e reiniciá-lo sem precisar deixar um terminal aberto.
+
+Instale-o globalmente:
+
+```bash
+npm install -g pm2
+```
+
+Verifique a instalação:
+
+```bash
+pm2 --version
+```
+
+### 5. Inicie o bot pelo PM2 com o nome `K7-bot`
+
+Dentro da pasta do projeto, execute:
+
+```bash
+pm2 start index.js --name K7-bot
+```
+
+O PM2 iniciará o bot em segundo plano e registrará o processo com o nome `K7-bot`.
+
+Verifique se ele está em execução:
+
+```bash
+pm2 status
+```
+
+Para consultar os logs do bot em tempo real:
+
+```bash
+pm2 logs K7-bot
+```
+
+Para reiniciar o bot:
+
+```bash
+pm2 restart K7-bot
+```
+
+Para interromper a execução:
+
+```bash
+pm2 stop K7-bot
+```
+
+Para iniciar novamente um processo que foi interrompido:
+
+```bash
+pm2 start K7-bot
+```
+
+Para remover o processo do gerenciamento do PM2:
+
+```bash
+pm2 delete K7-bot
+```
+
+**Atenção:** o comando `pm2 delete` remove o processo do gerenciamento, mas não apaga os arquivos do bot.
+
+### 6. Configure a inicialização automática
+
+Por padrão, iniciar um processo com PM2 não garante que ele será iniciado automaticamente após uma reinicialização do servidor. Para configurar isso, execute:
+
+```bash
+pm2 startup
+```
+
+O PM2 exibirá um comando específico para o seu sistema operacional. **Copie e execute exatamente o comando apresentado no terminal**, pois ele pode exigir privilégios administrativos.
+
+Em seguida, salve a lista atual de processos:
+
+```bash
+pm2 save
+```
+
+Com isso, o PM2 poderá restaurar o processo `K7-bot` após a reinicialização do servidor, desde que o mecanismo de inicialização tenha sido configurado corretamente.
 
 ---
 
-## 🌐 Community
+## 🌐 Comunidade
 
 <div align="center">
 
 <a href="https://t.me/+3QhFUZHx-nhhZmY1" target="_blank">
-  <img src="https://img.shields.io/badge/Join-Telegram-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Join Telegram">
+  <img src="https://img.shields.io/badge/Entrar-Telegram-0088cc?style=for-the-badge&logo=telegram&logoColor=white" alt="Entrar no Telegram">
 </a>
 
 <a href="https://whatsapp.com/channel/0029Va90zAnIHphOuO8Msp3A" target="_blank">
-  <img src="https://img.shields.io/badge/Join-WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Join WhatsApp Channel">
+  <img src="https://img.shields.io/badge/Entrar-Canal%20do%20WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="Entrar no canal do WhatsApp">
 </a>
 
 </div>
 
 ---
 
-## 🙏 Credits
+## 🙏 Créditos
 
-- **Mr Unique Hacker** – Main developer & maintainer  
-- **Baileys** – WhatsApp Web API library (`@whiskeysockets/baileys`)  
-- Other open‑source libraries listed in `package.json`
-
----
-
-## ⚠️ Important Warning
-
-- This bot is created **for educational purposes only**.  
-- This is **NOT** an official WhatsApp bot.  
-- Using third‑party bots **may violate WhatsApp’s Terms of Service** and can lead to your account being **banned**.
-
-> You use this bot **at your own risk**.  
-> The developers are **not responsible** for any bans, issues, or damages resulting from its use.
+- **Mr Unique Hacker:** desenvolvedor principal e mantenedor do projeto original.
+- **Montanha:** desenvolvedor e mantenedor desse fork.
+- **Baileys:** biblioteca de API do WhatsApp Web (`@whiskeysockets/baileys`).
+- **Outras bibliotecas de código aberto:** listadas no arquivo `package.json`.
 
 ---
 
-## 📝 Legal
+## ⚠️ Aviso importante
 
-- This project is **not affiliated with, authorized, maintained, sponsored, or endorsed** by WhatsApp Inc. or any of its affiliates or subsidiaries.  
-- This is **independent and unofficial software**.  
-- **Do not spam** people using this bot.  
-- **Do not** use this bot for bulk messaging, harassment, or any **illegal activities**.  
-- The developers assume **no liability** and are **not responsible** for any misuse or damage caused by this program.
+- Este bot foi desenvolvido **apenas para fins educacionais**.
+- Este **não é um bot oficial do WhatsApp**.
+- O uso de bots de terceiros pode violar os Termos de Serviço do WhatsApp e resultar no banimento da sua conta.
 
----
-
-## 📄 License (MIT)
-
-This project is licensed under the **MIT License**.
-
-You must:
-
-- Use this software in compliance with **all applicable laws and regulations**.  
-- Keep the **original license and copyright** notices.  
-- **Credit the original authors**.  
-- **Not** use this for spam, abuse, or malicious purposes.
+> Utilize este bot por sua própria conta e risco. Os desenvolvedores não se responsabilizam por banimentos, problemas ou danos decorrentes do uso do programa.
 
 ---
 
-## 📜 Copyright Notice
+## 📝 Aviso legal
 
-Copyright (c) **2026 Professor**.  
-All rights reserved.
+- Este projeto não é afiliado, autorizado, mantido, patrocinado ou endossado pela WhatsApp Inc. ou por suas afiliadas e subsidiárias.
+- Trata-se de um software independente e não oficial.
+- **Não utilize o bot para enviar spam.**
+- Não utilize o programa para envio massivo de mensagens, assédio ou qualquer atividade ilegal.
+- Os desenvolvedores não assumem responsabilidade por usos indevidos ou danos causados pelo programa.
 
-This project contains code from various open‑source projects and AI tools, including but not limited to:
+---
 
-- **Baileys** – MIT License  
-- Other libraries as listed in `package.json`
+## 📄 Licença MIT
 
+Este projeto está licenciado sob a **Licença MIT**.
+
+Ao utilizar o software, você deve:
+
+- Cumprir todas as leis e regulamentações aplicáveis.
+- Preservar os avisos originais de licença e direitos autorais.
+- Dar os devidos créditos aos autores originais.
+- Não utilizar o programa para spam, abuso ou atividades maliciosas.
+
+---
+
+## 📜 Aviso de direitos autorais
+
+Copyright (c) **2026 Professor**.
+
+Todos os direitos reservados, conforme os termos aplicáveis ao projeto e às suas contribuições.
+
+Este projeto contém código proveniente de diferentes projetos de código aberto e ferramentas de inteligência artificial, incluindo, entre outros:
+
+- **Baileys:** licença MIT.
+- **Outras bibliotecas:** conforme listado no arquivo `package.json`.
