@@ -71,7 +71,7 @@ module.exports = {
     
       // KnightBot Mini media API (song/video/tiktok/facebook/instagram downloaders)
     // Change once here — all media commands read from this.
-    mediaApiUrl: (process.env.YT_API_URL || 'https://api-xgp2.onrender.com').replace(/\/$/, ''),
+    mediaApiUrl: (process.env.YT_API_URL || 'https://knightbotapi.stream/api/download?apikey=knight&type=mp3&url=https%3A%2F%2Fyoutu.be%2FDTbfw8_SMmI%3Fsi%3DYPUgUhtZSSYvdZ27').replace(/\/$/, ''),
     mediaApiKey: process.env.YT_API_KEY || 'knight',
     // KnightBot public API (reactions GIFs, etc.)
     knightApiUrl: (process.env.KNIGHT_API_URL || 'https://knightbotapi.stream').replace(/\/$/, ''),
