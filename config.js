@@ -4,11 +4,11 @@
 
 module.exports = {
     // Bot Owner Configuration
-    ownerNumber: ['9876543210'], // Add your number without + or spaces (e.g., 919876543210)
-    ownerName: ['Knight Bot Mini'], // Owner names corresponding to ownerNumber array
+    ownerNumber: ['5586981006669'], // Add your number without + or spaces (e.g., 919876543210)
+    ownerName: ['Carlos Henrique'], // Owner names corresponding to ownerNumber array
     
     // Bot Configuration
-    botName: 'Knight Bot Mini',
+    botName: 'K7 Bot',
     prefix: '.',
     sessionName: 'session',
     sessionID: process.env.SESSION_ID || '', //Paste your session here 
@@ -16,7 +16,7 @@ module.exports = {
     updateZipUrl: 'https://github.com/mruniquehacker/KnightBot-Mini/archive/refs/heads/main.zip', // URL to latest code zip for .update command
     
         // Sticker Configuration
-        packname: 'Knight Bot',
+        packname: 'K7 Bot',
     
         // Bot Behavior
         selfMode: false, // Private mode - only owner can use commands
