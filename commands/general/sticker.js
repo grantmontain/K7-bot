@@ -99,8 +99,8 @@ module.exports = {
         const isLargeFile = fileSizeKB > 5000;
         
         const fallbackCmd = isLargeFile
-        ? `"${ffmpegPath}" -y -i "${tempInput}" -t 2 -vf "scale=512:512,fps=8" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 30 -compression_level 6 -b:v 100k -max_muxing_queue_size 1024 "${tempOutput2}"`
-        : `"${ffmpegPath}" -y -i "${tempInput}" -t 3 -vf "scale=512:512,fps=12" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 45 -compression_level 6 -b:v 150k -max_muxing_queue_size 1024 "${tempOutput2}"`;
+        ? `"${ffmpegPath}" -y -i "${tempInput}" -t 9 -vf "scale=512:512,fps=8" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 30 -compression_level 6 -b:v 100k -max_muxing_queue_size 1024 "${tempOutput2}"`
+        : `"${ffmpegPath}" -y -i "${tempInput}" -t 9 -vf "scale=512:512,fps=12" -c:v libwebp -preset default -loop 0 -vsync 0 -pix_fmt yuva420p -quality 45 -compression_level 6 -b:v 150k -max_muxing_queue_size 1024 "${tempOutput2}"`;
         
         await execPromise(fallbackCmd);
         
