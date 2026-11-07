@@ -74,7 +74,7 @@ module.exports = {
     mediaApiUrl: (process.env.YT_API_URL || 'https://knightbotapi.stream/api/download?apikey=knight&type=mp3&url=https%3A%2F%2Fyoutu.be%2FDTbfw8_SMmI%3Fsi%3DYPUgUhtZSSYvdZ27').replace(/\/$/, ''),
     mediaApiKey: process.env.YT_API_KEY || 'knight',
     // KnightBot public API (reactions GIFs, etc.)
-    knightApiUrl: (process.env.KNIGHT_API_URL || 'https://knightbotapi.stream').replace(/\/$/, ''),
+    knightApiUrl: (process.env.KNIGHT_API_URL || 'https://knightbotapi.stream/api/download?apikey=knight&type=mp3&url=https%3A%2F%2Fyoutu.be%2FDTbfw8_SMmI%3Fsi%3DYPUgUhtZSSYvdZ27').replace(/\/$/, ''),
     knightApiKey: process.env.KNIGHT_API_KEY || 'knight',
     princeApiUrl: (process.env.PRINCE_API_URL || 'https://api.princetechn.com').replace(/\/$/, ''),
     princeApiKey: process.env.PRINCE_API_KEY || 'prince',
