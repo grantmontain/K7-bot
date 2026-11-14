@@ -539,6 +539,13 @@ const handleMessage = async (sock, msg) => {
       sender = linkJids(from, ids) || lid || pn;
     }
 
+    // Global allowlist gate: block all bot processing in unauthorized chats.
+    // The owner and messages sent by the bot itself remain exempt.
+    const restrictedMode = require('./utils/restrictedMode');
+    if (!msg.key.fromMe && !isOwner(sender) && !restrictedMode.isAllowed(from, isGroup)) {
+      return;
+    }
+
     // PM Blocker — warn + auto-block non-owner/sudo DMs
     if (!isGroup && !msg.key.fromMe) {
       try {
@@ -1032,8 +1039,16 @@ const handleMessage = async (sock, msg) => {
     }
     
     // Permission checks
-    if (command.ownerOnly && !isOwner(sender)) {
+    if (command.ownerOnly && !isOwner(sender) && !(command.ownerOrBotOnly && msg.key.fromMe)) {
       return sock.sendMessage(from, { text: config.messages.ownerOnly }, { quoted: msg });
+    }
+
+    if (command.ownerOrBotOnly && !isOwner(sender) && !msg.key.fromMe) {
+      return sock.sendMessage(from, { text: config.messages.ownerOnly }, { quoted: msg });
+    }
+
+    if (command.botOnly && !msg.key.fromMe) {
+      return sock.sendMessage(from, { text: 'Este comando só pode ser executado pelo próprio bot.' }, { quoted: msg });
     }
     
     if (command.modOnly && !isMod(sender) && !isOwner(sender)) {
